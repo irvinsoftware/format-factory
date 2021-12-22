@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6DD92A36-26FD-457F-BC71-CE2BC69868D6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Company.Entities</RootNamespace>
+    <AssemblyName>SampleProject</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="FixItFelix.cs" />
+    <Compile Include="GoodD.cs" />
+    <Compile Include="Detail.cs" />
+    <Compile Include="GoodE.cs" />
+    <Compile Include="InterchangeControlLoop.cs" />
+    <Compile Include="LegacyOrder.cs" />
+    <Compile Include="Hierarchical\FunctionalGroupHeader.cs" />
+    <Compile Include="Hierarchical\InterchangeControlLoop.cs" />
+    <Compile Include="Hierarchical\InterchangeControlTrailer.cs" />
+    <Compile Include="Hierarchical\TransactionSet.cs" />
+    <Compile Include="Inherited\EdiBase.cs" />
+    <Compile Include="Inherited\FunctionalGroupTrailer.cs" />
+    <Compile Include="Inherited\InterchangeControlLoop.cs" />
+    <Compile Include="Inherited\InterchangeControlTrailer.cs" />
+    <Compile Include="Inherited\SalesTaxSegment.cs" />
+    <Compile Include="Inherited\TransactionSegmentTrailer.cs" />
+    <Compile Include="Malformed\BadD.cs" />
+    <Compile Include="Malformed\BadE.cs" />
+    <Compile Include="Malformed\ExampleA.cs" />
+    <Compile Include="Malformed\ExampleB.cs" />
+    <Compile Include="Malformed\ExampleC.cs" />
+    <Compile Include="Master.cs" />
+    <Compile Include="MostExplicit\FunctionalGroupTrailer.cs" />
+    <Compile Include="MostExplicit\InterchangeControlLoop.cs" />
+    <Compile Include="MostExplicit\InterchangeControlTrailer.cs" />
+    <Compile Include="Order.cs" />
+    <Compile Include="Order2.cs" />
+    <Compile Include="Order3.cs" />
+    <Compile Include="Person.cs" />
+    <Compile Include="ProfessionalServiceLoop.cs" />
+    <Compile Include="MostExplicit\SalesTaxSegment.cs" />
+    <Compile Include="MostExplicit\TransactionSegmentTrailer.cs" />
+    <Compile Include="SimpleHeader.cs" />
+    <Compile Include="Statement.cs" />
+    <Compile Include="Stats.cs" />
+    <Compile Include="Thing.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FormatFactory.Main\FormatFactory.Main.csproj">
+      <Project>{8a1b6290-d92e-4cb0-aff4-67ea0ec58ce4}</Project>
+      <Name>FormatFactory.Main</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Irvin.FormatFactory</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>FormatFactory</PackageId>
+    <Authors>Irvin Software Products, LLC</Authors>
+    <Company>Irvin Software Products, LLC</Company>
+    <Product>FormatFactory</Product>
+    <Description>The best tool for building and parsing flat file formats (e.g., EDI, CSV, NATCHA, etc.)</Description>
+    <Copyright>© 2013-2021 Irvin Software Products LLC</Copyright>
+    <PackageProjectUrl>http://irvinsoftware.azurewebsites.net/#ffdoc</PackageProjectUrl>
+    <RepositoryType></RepositoryType>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <AssemblyName>FormatFactory</AssemblyName>
+    <DebugType>Full</DebugType>
+    <PackageVersion>1.0.0.1</PackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\parser-foundation\Parser\Parser.csproj" />
+    <ProjectReference Include="..\system-extensions\SystemExtensions.Standard\SystemExtensions.Standard.csproj" />
+  </ItemGroup>
+
+</Project>
