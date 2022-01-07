@@ -9,14 +9,14 @@
     <Company>Irvin Software Products, LLC</Company>
     <Product>FormatFactory</Product>
     <Description>The best tool for building and parsing flat file formats (e.g., EDI, CSV, NATCHA, etc.)</Description>
-    <Copyright>© 2013-2021 Irvin Software Products LLC</Copyright>
+    <Copyright>© 2013-2022 Irvin Software Products LLC</Copyright>
     <PackageProjectUrl>https://github.com/irvinsoftware/format-factory</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>Additional CSV support</PackageReleaseNotes>
     <AssemblyName>FormatFactory</AssemblyName>
     <DebugType>Full</DebugType>
-    <PackageVersion>1.0.0.1</PackageVersion>
+    <PackageVersion>1.0.1.1</PackageVersion>
     <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/irvinsoftware/format-factory</RepositoryUrl>
   </PropertyGroup>
