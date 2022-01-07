@@ -70,12 +70,14 @@ namespace TestProject
             Assert.AreEqual(34F, actual[2].Amount);
         }
 
-        [TestCase(typeof(Person))]
-        [TestCase(typeof(Person2))]
-        public void Read_ReadsEscapedHeaders_ForCsv_HeaderQuotingOnly(Type recordType)
+        [TestCase(typeof(Person), "State,Province")]
+        [TestCase(typeof(Person2), "State,Province")]
+        [TestCase(typeof(Person3), "State/Province")]
+        [TestCase(typeof(Person4), "State/Province")]
+        public void Read_ReadsEscapedHeaders_ForCsv_HeaderQuotingOnly(Type recordType, string header)
         {
             string content =
-                "Given Name,Family Name,Age,\"State,Province\",Created,Balance (USD)" + Environment.NewLine +
+               $"Given Name,Family Name,Age,\"{header}\",Created,Balance (USD)" + Environment.NewLine +
                 "Fred,Flinstone,25,UT,1/5/2017,159.36" + Environment.NewLine +
                 "Anna-Marie,Sadler,55,AB,2/9/2016 15:33:01,-45.02" + Environment.NewLine +
                 "Michael,Van Dusen,2,CA,7/6/2016 3:00 PM,34" + Environment.NewLine;
@@ -107,12 +109,14 @@ namespace TestProject
             Assert.AreEqual(34F, actual[2].Amount);
         }
 
-        [TestCase(typeof(Person))]
-        [TestCase(typeof(Person2))]
-        public void Read_ReadsEscapedHeaders_ForCsvMinimalQuoting(Type recordType)
+        [TestCase(typeof(Person), "State,Province")]
+        [TestCase(typeof(Person2), "State,Province")]
+        [TestCase(typeof(Person3), "State/Province")]
+        [TestCase(typeof(Person4), "State/Province")]
+        public void Read_ReadsEscapedHeaders_ForCsvMinimalQuoting(Type recordType, string header)
         {
             string content =
-                "Given Name,Family Name,Age,\"State,Province\",Created,Balance (USD)" + Environment.NewLine +
+               $"Given Name,Family Name,Age,\"{header}\",Created,Balance (USD)" + Environment.NewLine +
                 "Fred,Flinstone,25,UT,1/5/2017,159.36" + Environment.NewLine +
                 "Anna-Marie,Sadler,55,AB,2/9/2016 15:33:01,\"1,245.02\"" + Environment.NewLine +
                 "Michael,Van Dusen,2,\"Q,\",7/6/2016 3:00 PM,34" + Environment.NewLine;
@@ -146,16 +150,30 @@ namespace TestProject
 
         private static List<IPerson> ParseForPersons(Type recordType, string content, FormatOptions options)
         {
+            IEnumerable<IPerson> persons;
+            
             if (recordType == typeof(Person))
             {
-                List<Person> persons = FormatReader.Default.Read<Person>(content, options);
-                return persons.Cast<IPerson>().ToList();
+                persons = FormatReader.Default.Read<Person>(content, options);
+            }
+            else if(recordType == typeof(Person2))
+            {
+                persons = FormatReader.Default.Read<Person2>(content);
+            }
+            else if(recordType == typeof(Person3))
+            {
+                persons = FormatReader.Default.Read<Person3>(content, options);
+            }
+            else if(recordType == typeof(Person4))
+            {
+                persons = FormatReader.Default.Read<Person4>(content, options);
             }
             else
             {
-                List<Person2> persons = FormatReader.Default.Read<Person2>(content);
-                return persons.Cast<IPerson>().ToList();
+                throw new NotSupportedException();
             }
+
+            return persons.ToList();
         }
 
         [Test]
