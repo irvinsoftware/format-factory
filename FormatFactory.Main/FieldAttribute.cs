@@ -112,5 +112,10 @@ namespace Irvin.FormatFactory
         /// If False, a blank value is expected to be read and written for records that do have have content for the field.
         /// </summary>
 		public bool Optional { get; set; }
+
+        /// <summary>
+        /// When specified, every value in this field will be encapsulated with these character(s).
+        /// </summary>
+        public string AlwaysQuoteWith { get; set; }
 	}
 }

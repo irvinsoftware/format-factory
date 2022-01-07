@@ -53,6 +53,11 @@ namespace Irvin.FormatFactory
 		/// </summary>
 		public bool UseStrictMode { get; set; }
 
+		/// <summary>
+		/// When specified, every field value will be encapsulated with these character(s).
+		/// </summary>
+		public string QuoteEverythingWith { get; set; }
+
 		public bool AllowDelimitersAsEscapedContent { get; set; }
 
 		public EscapeKind EscapeKind { get; set; }
@@ -76,13 +81,14 @@ namespace Irvin.FormatFactory
 					EscapeKind = EscapeKind,
 					TransformEscapeCharacter = TransformEscapeCharacter,
 					IndentCharacters = IndentCharacters,
-                    IncludeHeaders = IncludeHeaders
+                    IncludeHeaders = IncludeHeaders,
+                    QuoteEverythingWith = QuoteEverythingWith
 				};
 		}
 
-        internal IFieldSettings DefaultFieldSetup { get; set; }
+	    internal IFieldSettings DefaultFieldSetup { get; set; }
 
-        public static FormatOptions DefaultCsvSettings
+	    public static FormatOptions DefaultCsvSettings
         {
             get
             {
@@ -98,5 +104,5 @@ namespace Irvin.FormatFactory
 				};
             }
         }
-    }
+	}
 }

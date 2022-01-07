@@ -125,6 +125,7 @@ namespace Irvin.FormatFactory
                         escapeSettings.DelimiterName = "header";
                         return GetEscapedFieldValue(fieldInfo.HeaderName, escapeSettings);
 	                })
+	                .Select(value => GetQuotedValue(value, settings))
 	                .ToArray();
 	            string headers = string.Join(settings.Options.FieldDelimiter, orderedHeaders);
 	            container.Append(headers);
@@ -132,7 +133,7 @@ namespace Irvin.FormatFactory
 	        }
 	    }
 
-	    private void WriteAllChildren(StringBuilder container, object element, RecordSettings settings, FormatOptions writerOptions)
+        private void WriteAllChildren(StringBuilder container, object element, RecordSettings settings, FormatOptions writerOptions)
         {
             IEnumerable<IOrderedMemberInfo> childMemberInfos = settings.OrderedMembers.Where(x => !x.IsInternalToRecord);
             foreach (IOrderedMemberInfo childElementInfo in childMemberInfos)
@@ -215,9 +216,10 @@ namespace Irvin.FormatFactory
                         }
 
 					    string formattedValue = GetFormattedValue(rawValue, settingsFormat);
-
-                        string fieldValue = GetAdjustedValue(settings, fieldInfo, formattedValue);
-					    record.Append(fieldValue);
+                        string adjustedValue = GetAdjustedValue(settings, fieldInfo, formattedValue);
+                        string quotedValue = GetQuotedValue(adjustedValue, settings, fieldInfo.Settings.AlwaysQuoteWith);
+                        
+					    record.Append(quotedValue);
 
 						finalDelimiter = AppendFieldDelimiter(record, settings.Options.FieldDelimiter, fieldInfo.Settings.Delimiter);
 					}
@@ -379,6 +381,24 @@ namespace Irvin.FormatFactory
 				default:
 					throw new NotSupportedException();
 			}
+		}
+		
+		private static string GetQuotedValue(string value, RecordSettings settings, string overrideCharacter = null)
+		{
+			string quoteCharacter = settings.Options.QuoteEverythingWith;
+			if (!string.IsNullOrWhiteSpace(overrideCharacter))
+			{
+				quoteCharacter = overrideCharacter;
+			}
+	        
+			if (!string.IsNullOrWhiteSpace(quoteCharacter) && 
+			    !value.StartsWith(quoteCharacter) && 
+			    !value.EndsWith(quoteCharacter))
+			{
+				return quoteCharacter + value + quoteCharacter;
+			}
+
+			return value;
 		}
 
 		private string AppendFieldDelimiter(StringBuilder record, string mainDelimiter, string overrideDelimiter)

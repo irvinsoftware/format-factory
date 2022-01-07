@@ -97,6 +97,10 @@ namespace Irvin.FormatFactory.Internal
             {
                 options.TransformEscapeCharacter = recordAttribute.TransformEscapeCharacter;
             }
+            if (!string.IsNullOrWhiteSpace(recordAttribute.QuoteEverythingWith))
+            {
+                options.QuoteEverythingWith = recordAttribute.QuoteEverythingWith;
+            }
 
             options.DefaultFieldSetup = recordAttribute.GetType().GetAttribute<DefaultFieldSetupAttribute>();
 

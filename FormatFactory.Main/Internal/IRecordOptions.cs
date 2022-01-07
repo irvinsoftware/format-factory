@@ -9,5 +9,6 @@
         EscapeKind EscapeKind { get; }
         char TransformEscapeCharacter { get; }
         bool UseStrictMode { get; }
+        string QuoteEverythingWith { get; set; }
 	}
 }

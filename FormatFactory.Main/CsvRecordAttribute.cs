@@ -64,5 +64,10 @@ namespace Irvin.FormatFactory
         {
             get { return FormatOptions.DefaultCsvSettings.TransformEscapeCharacter; }
         }
+
+        /// <summary>
+        /// <seealso cref="RecordAttribute.QuoteEverythingWith"/>
+        /// </summary>
+        public string QuoteEverythingWith { get; set; }
     }
 }
