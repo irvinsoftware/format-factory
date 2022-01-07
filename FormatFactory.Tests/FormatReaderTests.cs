@@ -69,6 +69,42 @@ namespace TestProject
             Assert.AreEqual(new DateTime(2016, 7, 6, 15, 0, 0), actual[2].EnteredDate);
             Assert.AreEqual(34F, actual[2].Amount);
         }
+        
+        [TestCase(typeof(Person3))]
+        public void Read_ReadsContent_ForCsvWithMixedQuoting(Type recordType)
+        {
+            string content =
+                "\"Given Name\",\"Family Name\",\"Age\",\"State/Province\",\"Created\",\"Balance (USD)\"" + Environment.NewLine +
+                "\"Fred\",\"Flinstone\",\"25\",\"UT\",'1/5/2017',\"159.36\"" + Environment.NewLine +
+                "\"Anna-Marie\",\"Sadler\",\"55\",\"AB\",'2/9/2016 15:33:01',\"-45.02\"" + Environment.NewLine +
+                "\"Michael\",\"Van Dusen\",\"2\",\"CA\",'7/6/2016 3:00 PM',\"34\"" + Environment.NewLine;
+            FormatOptions options = new FormatOptions {EscapeKind = EscapeKind.DoubleQuote};
+
+            List<IPerson> actual = ParseForPersons(recordType, content, options);
+
+            Assert.AreEqual(3, actual.Count);
+
+            Assert.AreEqual("Fred", actual[0].FirstName);
+            Assert.AreEqual("Flinstone", actual[0].LastName);
+            Assert.AreEqual(25, actual[0].Age);
+            Assert.AreEqual("UT", actual[0].State);
+            Assert.AreEqual(new DateTime(2017, 1, 5), actual[0].EnteredDate);
+            Assert.AreEqual(159.36F, actual[0].Amount);
+
+            Assert.AreEqual("Anna-Marie", actual[1].FirstName);
+            Assert.AreEqual("Sadler", actual[1].LastName);
+            Assert.AreEqual(55, actual[1].Age);
+            Assert.AreEqual("AB", actual[1].State);
+            Assert.AreEqual(new DateTime(2016, 2, 9, 15, 33, 1), actual[1].EnteredDate);
+            Assert.AreEqual(-45.02F, actual[1].Amount);
+
+            Assert.AreEqual("Michael", actual[2].FirstName);
+            Assert.AreEqual("Van Dusen", actual[2].LastName);
+            Assert.AreEqual(2, actual[2].Age);
+            Assert.AreEqual("CA", actual[2].State);
+            Assert.AreEqual(new DateTime(2016, 7, 6, 15, 0, 0), actual[2].EnteredDate);
+            Assert.AreEqual(34F, actual[2].Amount);
+        }
 
         [TestCase(typeof(Person), "State,Province")]
         [TestCase(typeof(Person2), "State,Province")]

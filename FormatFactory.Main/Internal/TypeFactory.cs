@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Irvin.FormatFactory.Internal.Member;
 
 namespace Irvin.FormatFactory.Internal
@@ -23,7 +24,7 @@ namespace Irvin.FormatFactory.Internal
                 typeMembers.AddRange(type.GetFields(bindingFlags));
                 typeMembers.AddRange(type.GetProperties(bindingFlags));
 
-                return typeMembers;
+                return typeMembers.Where(member => member.CustomAttributes.All(x => x.AttributeType != typeof(CompilerGeneratedAttribute)));
             });
         }
 
