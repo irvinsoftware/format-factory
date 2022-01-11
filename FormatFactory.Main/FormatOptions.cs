@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Irvin.FormatFactory.Internal;
 
@@ -104,5 +105,30 @@ namespace Irvin.FormatFactory
 				};
             }
         }
+
+	    public string EscapeCharacter
+	    {
+		    get
+		    {
+			    switch (EscapeKind)
+			    {
+				    case EscapeKind.SingleQuote:
+					    return "'";
+				    case EscapeKind.DoubleQuote:
+					    return "\"";
+				    case EscapeKind.Backslash:
+					    return "\\";
+				    case EscapeKind.ForwardSlash:
+					    return "/";
+				    case EscapeKind.Transform:
+					    return TransformEscapeCharacter.ToString(CultureInfo.InvariantCulture);
+				    case EscapeKind.Remove:
+					    return string.Empty;
+				    case EscapeKind.Repeat:
+				    default:
+					    return null;
+			    }
+		    }
+	    }
 	}
 }

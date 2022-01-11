@@ -275,9 +275,9 @@ namespace Irvin.FormatFactory
 			{
 				if (originalValue.Contains(settings.Delimiter))
 				{
-				    ThrowIfInvalidDelimiterUsage(settings);
+				    settings.ThrowIfInvalidDelimiterUsage();
 
-				    string character = GetEscapeCharacter(settings.Options);
+				    string character = settings.Options.EscapeCharacter;
 				    switch (settings.Options.EscapeKind)
 				    {
 				        case EscapeKind.SingleQuote:
@@ -287,15 +287,13 @@ namespace Irvin.FormatFactory
                         case EscapeKind.Repeat:
 				            fieldValue = ReplaceByPattern(fieldValue, settings.Delimiter, "{0}{0}");
                             break;
-                        case EscapeKind.Remove:
-				            fieldValue = fieldValue.Replace(settings.Delimiter, string.Empty);
-                            break;
                         case EscapeKind.Backslash:
                         case EscapeKind.ForwardSlash:
                             fieldValue = ReplaceByPattern(fieldValue, settings.Delimiter, character + "{0}");
                             break;
+				        case EscapeKind.Remove:
 				        case EscapeKind.Transform:
-				            fieldValue = fieldValue.Replace(settings.Delimiter, character);
+					        fieldValue = fieldValue.Replace(settings.Delimiter, character);
                             break;
                     }
 				}
@@ -304,49 +302,9 @@ namespace Irvin.FormatFactory
 			return fieldValue;
 		}
 
-        private static string GetEscapeCharacter(FormatOptions options)
-        {
-	        switch (options.EscapeKind)
-	        {
-		        case EscapeKind.SingleQuote:
-			        return "'";
-		        case EscapeKind.DoubleQuote:
-			        return "\"";
-		        case EscapeKind.Backslash:
-			        return "\\";
-		        case EscapeKind.ForwardSlash:
-			        return "/";
-		        case EscapeKind.Transform:
-			        return options.TransformEscapeCharacter.ToString(CultureInfo.InvariantCulture);
-		        default:
-			        return null;
-	        }
-        }
-
         private static string ReplaceByPattern(string str, string oldValue, string transform)
 	    {
 	        return str.Replace(oldValue, string.Format(transform, oldValue));
-	    }
-
-	    private static void ThrowIfInvalidDelimiterUsage(EscapeSettings settings)
-	    {
-	        if (!settings.Options.AllowDelimitersAsEscapedContent)
-            {
-                string messageFooter =
-                    settings.RowIndex >= 0
-                        ? $"in element #{settings.RowIndex + 1}"
-                        : "in the header";
-                string descriptor =
-	                !string.IsNullOrWhiteSpace(settings.MemberName)
-		                ? $"field '{settings.MemberName}'"
-		                : "sub-elements";
-
-	            string message =
-                    $"The {settings.DelimiterName} delimiter ('{settings.Delimiter}') " +
-                    $"was found in the content for {descriptor} {messageFooter}.";
-
-	            throw new InvalidDataException(message);
-	        }
 	    }
 
 	    private string AdjustValueWidth(FieldInfo fieldInfo, string formattedValue, int rowIndex)
@@ -423,7 +381,7 @@ namespace Irvin.FormatFactory
 				return value;
 			}
 			
-			if (quoteCharacter == GetEscapeCharacter(recordSettings.Options) &&
+			if (quoteCharacter == recordSettings.Options.EscapeCharacter &&
 			    value.StartsWith(quoteCharacter) && 
 			    value.EndsWith(quoteCharacter))
 			{
