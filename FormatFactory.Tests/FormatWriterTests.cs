@@ -14,6 +14,65 @@ namespace TestProject
 	[TestFixture]
 	public class FormatWriterTests
 	{
+		private string _temporaryFilename;
+
+		[TestFixtureSetUp]
+		public void RunFirstOnce()
+		{
+			_temporaryFilename = Path.GetTempFileName();
+		}
+
+		[SetUp]
+		public void RunBeforeEachTest()
+		{
+			if (File.Exists(_temporaryFilename))
+			{
+				File.Delete(_temporaryFilename);
+			}
+		}
+		
+		[TestCase(true)]
+		[TestCase(false)]
+		public void Write_WritesFileWithEscapedValues_IfQuoting(bool headers)
+		{
+			var salesRecords = new List<SaleDetail>();
+			salesRecords.Add(new SaleDetail
+			{
+				WeekStart = new DateTime(2021,12,5),
+				ChannelName = "TV",
+				RawSKU = 753366.ToString(),
+				RawDescription = "TrueControlWeed/KnifeKit", 
+				ConvertedSKUNumber = 8001550,
+				SoldAmount = 447,
+				SoldQuantity = 15,
+				OnHandQuantity = 15,
+				OnHandValue = 1439
+			});
+			salesRecords.Add(new SaleDetail
+			{
+				WeekStart = new DateTime(2021,12,5),
+				ChannelName = "TV",
+				RawSKU = 701884.ToString(),
+				RawDescription = "Pressable Mat 16\" x 20\"", 
+				ConvertedSKUNumber = 2005398,
+				SoldAmount = 425,
+				SoldQuantity = 8,
+				OnHandQuantity = 55,
+				OnHandValue = null
+			});
+			
+			FormatOptions options = new FormatOptions();
+			options.IncludeHeaders = headers;
+			using (Stream fileStream = File.Open(_temporaryFilename, FileMode.Append, FileAccess.Write, FileShare.Read))
+			{
+				FormatWriter.Instance.Write(fileStream, salesRecords, options);
+			}
+			
+			StringAssert.EndsWith("12/05/2021 00:00:00,TV,753366,,\"TrueControlWeed/KnifeKit\",8001550,0,447,15,15,1439,False\r\n" +
+			                      "12/05/2021 00:00:00,TV,701884,,\"Pressable Mat 16\"\" x 20\"\"\",2005398,0,425,8,55,,False\r\n",
+								  File.ReadAllText(_temporaryFilename));
+		}
+		
 		[Test]
 		public void Write_WritesOutQuotedCsvContent_ForUniversalQuoteAttributeSetting()
 		{

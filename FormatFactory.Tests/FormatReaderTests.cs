@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Company.Entities;
@@ -683,7 +682,6 @@ namespace TestProject
         {
             FileHeaderRecord record = NachaFileTestHelper.GetFileHeaderRecord();
             record.ImmediateDestination = "          ";
-            Debug.Assert(record.ImmediateDestination.Length == 10);
 
             TestWriteReadCycle(record);
         }

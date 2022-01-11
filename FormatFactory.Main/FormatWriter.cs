@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -270,13 +271,12 @@ namespace Irvin.FormatFactory
 				{
 				    ThrowIfInvalidDelimiterUsage(settings);
 
+				    string character = GetEscapeCharacter(settings.Options);
 				    switch (settings.Options.EscapeKind)
 				    {
 				        case EscapeKind.SingleQuote:
-				            fieldValue = $"'{fieldValue}'";
-				            break;
 				        case EscapeKind.DoubleQuote:
-				            fieldValue = $"\"{fieldValue}\"";
+				            fieldValue = $"{character}{fieldValue}{character}";
 				            break;
                         case EscapeKind.Repeat:
 				            fieldValue = ReplaceByPattern(fieldValue, settings.Delimiter, "{0}{0}");
@@ -285,14 +285,11 @@ namespace Irvin.FormatFactory
 				            fieldValue = fieldValue.Replace(settings.Delimiter, string.Empty);
                             break;
                         case EscapeKind.Backslash:
-                            fieldValue = ReplaceByPattern(fieldValue, settings.Delimiter, "\\{0}");
-                            break;
                         case EscapeKind.ForwardSlash:
-                            fieldValue = ReplaceByPattern(fieldValue, settings.Delimiter, "/{0}");
+                            fieldValue = ReplaceByPattern(fieldValue, settings.Delimiter, character + "{0}");
                             break;
-                        case EscapeKind.Transform:
-                            string replacement = settings.Options.TransformEscapeCharacter.ToString(CultureInfo.InvariantCulture);
-				            fieldValue = fieldValue.Replace(settings.Delimiter, replacement);
+				        case EscapeKind.Transform:
+				            fieldValue = fieldValue.Replace(settings.Delimiter, character);
                             break;
                     }
 				}
@@ -301,7 +298,26 @@ namespace Irvin.FormatFactory
 			return fieldValue;
 		}
 
-	    private static string ReplaceByPattern(string str, string oldValue, string transform)
+        private static string GetEscapeCharacter(FormatOptions options)
+        {
+	        switch (options.EscapeKind)
+	        {
+		        case EscapeKind.SingleQuote:
+			        return "'";
+		        case EscapeKind.DoubleQuote:
+			        return "\"";
+		        case EscapeKind.Backslash:
+			        return "\\";
+		        case EscapeKind.ForwardSlash:
+			        return "/";
+		        case EscapeKind.Transform:
+			        return options.TransformEscapeCharacter.ToString(CultureInfo.InvariantCulture);
+		        default:
+			        return null;
+	        }
+        }
+
+        private static string ReplaceByPattern(string str, string oldValue, string transform)
 	    {
 	        return str.Replace(oldValue, string.Format(transform, oldValue));
 	    }
@@ -390,15 +406,26 @@ namespace Irvin.FormatFactory
 			{
 				quoteCharacter = overrideCharacter;
 			}
-	        
-			if (!string.IsNullOrWhiteSpace(quoteCharacter) && 
-			    !value.StartsWith(quoteCharacter) && 
-			    !value.EndsWith(quoteCharacter))
-			{
-				return quoteCharacter + value + quoteCharacter;
-			}
 
-			return value;
+			if (string.IsNullOrWhiteSpace(quoteCharacter))
+			{
+				return value;
+			}
+			
+			if (quoteCharacter == GetEscapeCharacter(settings.Options) &&
+			    value.StartsWith(quoteCharacter) && 
+			    value.EndsWith(quoteCharacter))
+			{
+				return value;
+			}
+			
+			EscapeSettings escapeSettings = new EscapeSettings(0, null, settings.Options.Clone());
+			escapeSettings.Delimiter = quoteCharacter;
+			escapeSettings.DelimiterName = "quote";
+			escapeSettings.Options.EscapeKind = EscapeKind.Repeat;
+			value = GetEscapedFieldValue(value, escapeSettings);
+
+			return quoteCharacter + value + quoteCharacter;
 		}
 
 		private string AppendFieldDelimiter(StringBuilder record, string mainDelimiter, string overrideDelimiter)
@@ -418,6 +445,7 @@ namespace Irvin.FormatFactory
 			return finalDelimiter ?? string.Empty;
 		}
 
+        [SuppressMessage("ReSharper", "FormatStringProblem")]
         private static string GetFormattedValue(object rawValue, string settingsFormat)
         {
             if (rawValue == null)

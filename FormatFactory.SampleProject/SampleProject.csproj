@@ -63,6 +63,7 @@
     <Compile Include="ProfessionalServiceLoop.cs" />
     <Compile Include="MostExplicit\SalesTaxSegment.cs" />
     <Compile Include="MostExplicit\TransactionSegmentTrailer.cs" />
+    <Compile Include="SaleDetail.cs" />
     <Compile Include="SimpleHeader.cs" />
     <Compile Include="Statement.cs" />
     <Compile Include="Stats.cs" />
