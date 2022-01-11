@@ -123,7 +123,7 @@ namespace TestProject
 			FormatWriter.Default.Write(builder, items);
 
 			string expected =
-				"Given Name,Family Name,Age,State/Province,Created,Balance (USD)" + Environment.NewLine.Last() +
+				"Given Name,Family Name,Age,State/Province,'Created',Balance (USD)" + Environment.NewLine.Last() +
 				"Fred,Flinstone,25,UT,'01/05/2017 00:00:00',159.36" + Environment.NewLine.Last() +
 				"Anna-Marie,Sadler,55,AB,'02/19/2016 15:33:01',-45.02" + Environment.NewLine.Last() +
 				"Michael,Van Dusen,2,CA,'07/06/2016 09:00:00',34" + Environment.NewLine.Last();
@@ -141,7 +141,7 @@ namespace TestProject
 			FormatWriter.Default.Write(builder, items, options);
 
 			string expected =
-				"\"Given Name\",\"Family Name\",\"Age\",\"State/Province\",\"Created\",\"Balance (USD)\"" + Environment.NewLine.Last() +
+				"\"Given Name\",\"Family Name\",\"Age\",\"State/Province\",'Created',\"Balance (USD)\"" + Environment.NewLine.Last() +
 				"\"Fred\",\"Flinstone\",\"25\",\"UT\",'01/05/2017 00:00:00',\"159.36\"" + Environment.NewLine.Last() +
 				"\"Anna-Marie\",\"Sadler\",\"55\",\"AB\",'02/19/2016 15:33:01',\"-45.02\"" + Environment.NewLine.Last() +
 				"\"Michael\",\"Van Dusen\",\"2\",\"CA\",'07/06/2016 09:00:00',\"34\"" + Environment.NewLine.Last();
@@ -667,7 +667,7 @@ namespace TestProject
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidDataException), ExpectedMessage = "The field delimiter (',') was found in the content for field 'Description' for element #1.")]
+		[ExpectedException(typeof(InvalidDataException), ExpectedMessage = "The field delimiter (',') was found in the content for field 'Description' in element #1.")]
 		public void Write_ThrowsException_IfEscapingNotAllowed()
 		{
 			Master element = new Master();

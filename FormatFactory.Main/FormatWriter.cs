@@ -121,12 +121,18 @@ namespace Irvin.FormatFactory
 	                .Where(x => !string.IsNullOrWhiteSpace(x.HeaderName))
 	                .Select(fieldInfo =>
 	                {
-                        EscapeSettings escapeSettings = new EscapeSettings(-1, fieldInfo.MemberInfo.Name, settings.Options);
-                        escapeSettings.Delimiter = settings.Options.FieldDelimiter;
-                        escapeSettings.DelimiterName = "header";
-                        return GetEscapedFieldValue(fieldInfo.HeaderName, escapeSettings);
+		                EscapeSettings escapeSettings = new EscapeSettings(-1, fieldInfo.MemberInfo.Name, settings.Options);
+		                escapeSettings.Delimiter = settings.Options.FieldDelimiter;
+		                escapeSettings.DelimiterName = "header";
+		                string headerName = GetEscapedFieldValue(fieldInfo.HeaderName, escapeSettings);
+		                
+		                return new
+		                {
+			                HeaderName = headerName,
+			                FieldInfo = fieldInfo as FieldInfo
+		                };
 	                })
-	                .Select(value => GetQuotedValue(value, settings))
+	                .Select(headerInfo => GetQuotedValue(headerInfo.HeaderName, settings, headerInfo.FieldInfo))
 	                .ToArray();
 	            string headers = string.Join(settings.Options.FieldDelimiter, orderedHeaders);
 	            container.Append(headers);
@@ -218,7 +224,7 @@ namespace Irvin.FormatFactory
 
 					    string formattedValue = GetFormattedValue(rawValue, settingsFormat);
                         string adjustedValue = GetAdjustedValue(settings, fieldInfo, formattedValue);
-                        string quotedValue = GetQuotedValue(adjustedValue, settings, fieldInfo.Settings.AlwaysQuoteWith);
+                        string quotedValue = GetQuotedValue(adjustedValue, settings, fieldInfo);
                         
 					    record.Append(quotedValue);
 
@@ -328,12 +334,16 @@ namespace Irvin.FormatFactory
             {
                 string messageFooter =
                     settings.RowIndex >= 0
-                        ? $"for element #{settings.RowIndex + 1}"
+                        ? $"in element #{settings.RowIndex + 1}"
                         : "in the header";
+                string descriptor =
+	                !string.IsNullOrWhiteSpace(settings.MemberName)
+		                ? $"field '{settings.MemberName}'"
+		                : "sub-elements";
 
 	            string message =
                     $"The {settings.DelimiterName} delimiter ('{settings.Delimiter}') " +
-                    $"was found in the content for field '{settings.MemberName}' {messageFooter}.";
+                    $"was found in the content for {descriptor} {messageFooter}.";
 
 	            throw new InvalidDataException(message);
 	        }
@@ -399,9 +409,10 @@ namespace Irvin.FormatFactory
 			}
 		}
 		
-		private static string GetQuotedValue(string value, RecordSettings settings, string overrideCharacter = null)
+		private static string GetQuotedValue(string value, RecordSettings recordSettings, FieldInfo fieldInfo)
 		{
-			string quoteCharacter = settings.Options.QuoteEverythingWith;
+			string quoteCharacter = recordSettings.Options.QuoteEverythingWith;
+			string overrideCharacter = fieldInfo?.Settings.AlwaysQuoteWith;
 			if (!string.IsNullOrWhiteSpace(overrideCharacter))
 			{
 				quoteCharacter = overrideCharacter;
@@ -412,14 +423,14 @@ namespace Irvin.FormatFactory
 				return value;
 			}
 			
-			if (quoteCharacter == GetEscapeCharacter(settings.Options) &&
+			if (quoteCharacter == GetEscapeCharacter(recordSettings.Options) &&
 			    value.StartsWith(quoteCharacter) && 
 			    value.EndsWith(quoteCharacter))
 			{
 				return value;
 			}
 			
-			EscapeSettings escapeSettings = new EscapeSettings(0, null, settings.Options.Clone());
+			EscapeSettings escapeSettings = new EscapeSettings(recordSettings.RowIndex, fieldInfo?.MemberInfo.Name, recordSettings.Options.Clone());
 			escapeSettings.Delimiter = quoteCharacter;
 			escapeSettings.DelimiterName = "quote";
 			escapeSettings.Options.EscapeKind = EscapeKind.Repeat;
