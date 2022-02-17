@@ -13,5 +13,6 @@
         char PaddingCharacter { get; set; }
         string Delimiter { get; set; }
         bool Optional { get; set; }
+        string AlwaysQuoteWith { get; set; }
     }
 }

@@ -237,8 +237,16 @@ namespace Irvin.FormatFactory
         private string GetRawValue(TokenCollection tokens, RecordSettings recordSettings, Internal.FieldInfo fieldSettings = null, int fixedWidthOffset = 0)
         {
             string rawValue = GetRawFieldValue(tokens, recordSettings, fieldSettings, fixedWidthOffset);
-            rawValue = rawValue.Trim('\r');
-            return RemoveEscapeCharacters(rawValue, recordSettings.Options);
+            
+            rawValue = RemoveEscapeCharacters(rawValue.Trim('\r'), recordSettings.Options);
+
+            string quoteCharacters = fieldSettings?.Settings?.AlwaysQuoteWith;
+            if (!string.IsNullOrWhiteSpace(quoteCharacters) && rawValue.StartsWith(quoteCharacters) && rawValue.EndsWith(quoteCharacters))
+            {
+                rawValue = rawValue.Substring(1, rawValue.Length - 2);
+            }
+
+            return rawValue;
         }
 
         private string GetRawFieldValue(TokenCollection tokens, RecordSettings recordSettings, Internal.FieldInfo fieldSettings, int fixedWidthOffset)

@@ -14,37 +14,85 @@ namespace TestProject
 	[TestFixture]
 	public class FormatWriterTests
 	{
+		[Test]
+		public void Write_WritesOutQuotedCsvContent_ForUniversalQuoteAttributeSetting()
+		{
+			List<Person4> items = GetTestPeopleNotNeedingEscapes<Person4>();
+			FormatOptions options = new FormatOptions
+			{
+				EscapeKind = EscapeKind.DoubleQuote,
+			};
+
+			StringBuilder builder = new StringBuilder();
+			FormatWriter.Instance.Write(builder, items, options);
+
+			string expected =
+				"\"Given Name\",\"Family Name\",\"Age\",\"State/Province\",\"Created\",\"Balance (USD)\"" + Environment.NewLine.Last() +
+				"\"Fred\",\"Flinstone\",\"25\",\"UT\",\"01/05/2017 00:00:00\",\"159.36\"" + Environment.NewLine.Last() +
+				"\"Anna-Marie\",\"Sadler\",\"55\",\"AB\",\"02/19/2016 15:33:01\",\"-45.02\"" + Environment.NewLine.Last() +
+				"\"Michael\",\"Van Dusen\",\"2\",\"CA\",\"07/06/2016 09:00:00\",\"34\"" + Environment.NewLine.Last();
+			Assert.AreEqual(expected, builder.ToString());
+		}
+		
+		[Test]
+		public void Write_WritesOutQuotedCsvContent_ForUniversalQuoteOption()
+		{
+			List<Person> items = GetTestPeopleNotNeedingEscapes<Person>();
+			FormatOptions options = new FormatOptions
+			{
+				EscapeKind = EscapeKind.DoubleQuote,
+				QuoteEverythingWith = "\""
+			};
+
+			StringBuilder builder = new StringBuilder();
+			FormatWriter.Instance.Write(builder, items, options);
+
+			string expected =
+				"\"Given Name\",\"Family Name\",\"Age\",\"State,Province\",\"Created\",\"Balance (USD)\"" + Environment.NewLine +
+				"\"Fred\",\"Flinstone\",\"25\",\"UT\",\"01/05/2017 00:00:00\",\"159.36\"" + Environment.NewLine +
+				"\"Anna-Marie\",\"Sadler\",\"55\",\"AB\",\"02/19/2016 15:33:01\",\"-45.02\"" + Environment.NewLine +
+				"\"Michael\",\"Van Dusen\",\"2\",\"CA\",\"07/06/2016 09:00:00\",\"34\"" + Environment.NewLine;
+			Assert.AreEqual(expected, builder.ToString());
+		}
+		
+		[Test]
+		public void Write_WritesOutQuotedCsvContentWithEscapedHeaders_ForAllColumnQuote()
+		{
+			List<Person3> items = GetTestPeopleNotNeedingEscapes<Person3>();
+
+			StringBuilder builder = new StringBuilder();
+			FormatWriter.Default.Write(builder, items);
+
+			string expected =
+				"Given Name,Family Name,Age,State/Province,'Created',Balance (USD)" + Environment.NewLine.Last() +
+				"Fred,Flinstone,25,UT,'01/05/2017 00:00:00',159.36" + Environment.NewLine.Last() +
+				"Anna-Marie,Sadler,55,AB,'02/19/2016 15:33:01',-45.02" + Environment.NewLine.Last() +
+				"Michael,Van Dusen,2,CA,'07/06/2016 09:00:00',34" + Environment.NewLine.Last();
+			Assert.AreEqual(expected, builder.ToString());
+		}
+		
+		[Test]
+		public void Write_WritesOutQuotedCsvContentWithOverridenQuote_ForAllColumnQuote()
+		{
+			List<Person3> items = GetTestPeopleNotNeedingEscapes<Person3>();
+			FormatOptions options = new FormatOptions();
+			options.QuoteEverythingWith = "\"";
+
+			StringBuilder builder = new StringBuilder();
+			FormatWriter.Default.Write(builder, items, options);
+
+			string expected =
+				"\"Given Name\",\"Family Name\",\"Age\",\"State/Province\",'Created',\"Balance (USD)\"" + Environment.NewLine.Last() +
+				"\"Fred\",\"Flinstone\",\"25\",\"UT\",'01/05/2017 00:00:00',\"159.36\"" + Environment.NewLine.Last() +
+				"\"Anna-Marie\",\"Sadler\",\"55\",\"AB\",'02/19/2016 15:33:01',\"-45.02\"" + Environment.NewLine.Last() +
+				"\"Michael\",\"Van Dusen\",\"2\",\"CA\",'07/06/2016 09:00:00',\"34\"" + Environment.NewLine.Last();
+			Assert.AreEqual(expected, builder.ToString());
+		}
+		
 	    [Test]
 	    public void Write_WritesOutCsvContentWithEscapedHeaders()
 	    {
-	        List<Person> items = new List<Person>();
-            items.Add(new Person
-            {
-                FirstName = "Fred",
-                LastName = "Flinstone",
-                Age = 25,
-                State = "UT",
-                EnteredDate = new DateTime(2017, 1, 5),
-                Amount = 159.36F
-            });
-            items.Add(new Person
-            {
-                FirstName = "Anna-Marie",
-                LastName = "Sadler",
-                Age = 55,
-                State = "AB",
-                EnteredDate = new DateTime(2016, 2, 19, 15, 33, 1),
-                Amount = -45.02F
-            });
-            items.Add(new Person
-            {
-                FirstName = "Michael",
-                LastName = "Van Dusen",
-                Age = 2,
-                State = "CA",
-                EnteredDate = new DateTime(2016, 7, 6, 9, 0, 0),
-                Amount = 34F
-            });
+		    List<Person> items = GetTestPeopleNotNeedingEscapes<Person>();
             FormatOptions options = new FormatOptions
             {
                 EscapeKind = EscapeKind.DoubleQuote
@@ -61,37 +109,10 @@ namespace TestProject
             Assert.AreEqual(expected, builder.ToString());
         }
 
-        [Test]
+	    [Test]
         public void Write_WritesOutCsvContentWithEscapedHeaders_ForComprehensiveAttribute()
         {
-            List<Person2> items = new List<Person2>();
-            items.Add(new Person2
-            {
-                FirstName = "Fred",
-                LastName = "Flinstone",
-                Age = 25,
-                State = "UT",
-                EnteredDate = new DateTime(2017, 1, 5),
-                Amount = 159.36F
-            });
-            items.Add(new Person2
-            {
-                FirstName = "Anna-Marie",
-                LastName = "Sadler",
-                Age = 55,
-                State = "AB",
-                EnteredDate = new DateTime(2016, 2, 19, 15, 33, 1),
-                Amount = -45.02F
-            });
-            items.Add(new Person2
-            {
-                FirstName = "Michael",
-                LastName = "Van Dusen",
-                Age = 2,
-                State = "CA",
-                EnteredDate = new DateTime(2016, 7, 6, 9, 0, 0),
-                Amount = 34F
-            });
+	        List<Person2> items = GetTestPeopleNotNeedingEscapes<Person2>();
 
             StringBuilder builder = new StringBuilder();
             FormatWriter.Default.Write(builder, items);
@@ -104,37 +125,45 @@ namespace TestProject
             Assert.AreEqual(expected, builder.ToString());
         }
 
+        private List<T> GetTestPeopleNotNeedingEscapes<T>() 
+	        where T : IPerson, new()
+        {
+	        return new List<T>
+	        {
+		        new T
+		        {
+			        FirstName = "Fred",
+			        LastName = "Flinstone",
+			        Age = 25,
+			        State = "UT",
+			        EnteredDate = new DateTime(2017, 1, 5),
+			        Amount = 159.36F
+		        },
+		        new T
+		        {
+			        FirstName = "Anna-Marie",
+			        LastName = "Sadler",
+			        Age = 55,
+			        State = "AB",
+			        EnteredDate = new DateTime(2016, 2, 19, 15, 33, 1),
+			        Amount = -45.02F
+		        },
+		        new T
+		        {
+			        FirstName = "Michael",
+			        LastName = "Van Dusen",
+			        Age = 2,
+			        State = "CA",
+			        EnteredDate = new DateTime(2016, 7, 6, 9, 0, 0),
+			        Amount = 34F
+		        }
+	        };
+        }
+
         [Test]
         public void Write_WritesOutCsvContentWithEscapedValues()
         {
-            List<Person> items = new List<Person>();
-            items.Add(new Person
-            {
-                FirstName = "Fred",
-                LastName = "Flinstone",
-                Age = 25,
-                State = "UT",
-                EnteredDate = new DateTime(2017, 1, 5),
-                Amount = 159.36F
-            });
-            items.Add(new Person
-            {
-                FirstName = "Anna,Marie",
-                LastName = "Sadler",
-                Age = 55,
-                State = "AB",
-                EnteredDate = new DateTime(2016, 2, 9, 15, 33, 1),
-                Amount = 1245.02F
-            });
-            items.Add(new Person
-            {
-                FirstName = "Michael",
-                LastName = "Van Dusen",
-                Age = 2,
-                State = "Q,",
-                EnteredDate = new DateTime(2016, 7, 6, 9, 0, 0),
-                Amount = 34F
-            });
+            List<Person> items = GetTestPeopleNeedingEscapes<Person>();
             FormatOptions options = new FormatOptions
             {
                 EscapeKind = EscapeKind.DoubleQuote
@@ -154,34 +183,7 @@ namespace TestProject
         [Test]
         public void Write_WritesOutCsvContentWithEscapedValues_ForComprehensiveAttribute()
         {
-            List<Person2> items = new List<Person2>();
-            items.Add(new Person2
-            {
-                FirstName = "Fred",
-                LastName = "Flinstone",
-                Age = 25,
-                State = "UT",
-                EnteredDate = new DateTime(2017, 1, 5),
-                Amount = 159.36F
-            });
-            items.Add(new Person2
-            {
-                FirstName = "Anna,Marie",
-                LastName = "Sadler",
-                Age = 55,
-                State = "AB",
-                EnteredDate = new DateTime(2016, 2, 9, 15, 33, 1),
-                Amount = 1245.02F
-            });
-            items.Add(new Person2
-            {
-                FirstName = "Michael",
-                LastName = "Van Dusen",
-                Age = 2,
-                State = "Q,",
-                EnteredDate = new DateTime(2016, 7, 6, 9, 0, 0),
-                Amount = 34F
-            });
+	        List<Person2> items = GetTestPeopleNeedingEscapes<Person2>();
 
             StringBuilder builder = new StringBuilder();
             FormatWriter.Default.Write(builder, items);
@@ -192,6 +194,40 @@ namespace TestProject
                 "\"Anna,Marie\",Sadler,55,AB,02/09/2016 15:33:01,1245.02" + Environment.NewLine.Last() +
                 "Michael,Van Dusen,2,\"Q,\",07/06/2016 09:00:00,34" + Environment.NewLine.Last();
             Assert.AreEqual(expected, builder.ToString());
+        }
+
+        private static List<T> GetTestPeopleNeedingEscapes<T>() where T : IPerson, new()
+        {
+	        return new List<T>
+	        {
+		        new T
+		        {
+			        FirstName = "Fred",
+			        LastName = "Flinstone",
+			        Age = 25,
+			        State = "UT",
+			        EnteredDate = new DateTime(2017, 1, 5),
+			        Amount = 159.36F
+		        },
+		        new T
+		        {
+			        FirstName = "Anna,Marie",
+			        LastName = "Sadler",
+			        Age = 55,
+			        State = "AB",
+			        EnteredDate = new DateTime(2016, 2, 9, 15, 33, 1),
+			        Amount = 1245.02F
+		        },
+		        new T
+		        {
+			        FirstName = "Michael",
+			        LastName = "Van Dusen",
+			        Age = 2,
+			        State = "Q,",
+			        EnteredDate = new DateTime(2016, 7, 6, 9, 0, 0),
+			        Amount = 34F
+		        }
+	        };
         }
 
         [Test]
@@ -572,7 +608,7 @@ namespace TestProject
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidDataException), ExpectedMessage = "The field delimiter (',') was found in the content for field 'Description' for element #1.")]
+		[ExpectedException(typeof(InvalidDataException), ExpectedMessage = "The field delimiter (',') was found in the content for field 'Description' in element #1.")]
 		public void Write_ThrowsException_IfEscapingNotAllowed()
 		{
 			Master element = new Master();

@@ -21,6 +21,7 @@ namespace Irvin.FormatFactory.Internal
         public char PaddingCharacter { get; set; }
         public string Delimiter { get; set; }
         public bool Optional { get; set; }
+        public string AlwaysQuoteWith { get; set; }
 
         internal static void SetDefaults(IFieldSettings fieldSettings)
         {

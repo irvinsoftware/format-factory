@@ -30,8 +30,13 @@ namespace Irvin.FormatFactory
         /// Strict Mode means properties &amp; fields not decorated will cause an error
         /// </summary>
         public bool UseStrictMode { get; set; }
-        
-	    public EscapeKind EscapeKind { get; }
+
+        /// <summary>
+        /// When specified, every field will be encapsulated with these character(s).
+        /// </summary>
+        public string QuoteEverythingWith { get; set; }
+
+        public EscapeKind EscapeKind { get; }
 
 	    /// <summary>
 	    /// When <see cref="EscapeKind"/> is set to Transform, this is the character used.

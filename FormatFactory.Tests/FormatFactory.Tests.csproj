@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileReadAndWriteTests.cs" />
     <Compile Include="FormatReaderTests.cs" />
     <Compile Include="FormatReaderTests_ForSpecialized.cs" />
     <Compile Include="FormatWriterTests.cs" />
