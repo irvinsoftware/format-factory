@@ -54,7 +54,7 @@ namespace Irvin.FormatFactory
             foreach (Token token in headerTokens.Where(x => !x.IsDelimiter))
             {
                 columnIncrement++;
-                string columnName = !readOptions.IncludeHeaders ? $"Column{columnIncrement}" : token.Content;
+                string columnName = !readOptions.IncludeHeaders ? $"Column{columnIncrement}" : token.Content.Trim();
                 dataTable.Columns.Add(columnName, typeof(string));
             }
 
