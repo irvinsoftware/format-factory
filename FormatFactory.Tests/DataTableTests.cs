@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Irvin.FormatFactory;
@@ -10,6 +11,20 @@ namespace TestProject
     [TestFixture]
     public class DataTableTests
     {
+        [Test]
+        [SuppressMessage("ReSharper", "StringLiteralTypo")]
+        public void ReadTable_ParsesFinalColumnHeaderCorrectly()
+        {
+            DataTable actual = FormatReader.Default.ReadTable(File.ReadAllText("EDI_SAMPLE.CSV"), FormatOptions.DefaultCsvSettings);
+            
+            Assert.NotNull(actual);
+            Assert.AreEqual(8, actual.Columns.Count);
+            Assert.AreEqual("SDATA", actual.Columns[7].ColumnName);
+            Assert.AreEqual(34, actual.Rows.Count);
+            Assert.AreEqual(33, actual.Rows.Cast<DataRow>().Select(x => x["SDATA"].ToString()).Count(x => !string.IsNullOrWhiteSpace(x)));
+            StringAssert.Contains("FAKENAME1 FAKENAME2", actual.Rows[9]["SDATA"].ToString());
+        }
+    
         [Test]
         [SuppressMessage("ReSharper", "MethodTooLong")]
         public void ReadTable_ReturnsStringTypedDataset_WhenNoColumnsWereSpecified()

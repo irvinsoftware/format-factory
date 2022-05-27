@@ -16,11 +16,11 @@
     <PackageReleaseNotes>Additional CSV support</PackageReleaseNotes>
     <AssemblyName>FormatFactory</AssemblyName>
     <DebugType>Full</DebugType>
-    <PackageVersion>1.0.1.3</PackageVersion>
+    <PackageVersion>1.0.2</PackageVersion>
     <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/irvinsoftware/format-factory</RepositoryUrl>
-    <AssemblyVersion>1.0.1.3</AssemblyVersion>
-    <FileVersion>1.0.1.3</FileVersion>
+    <AssemblyVersion>1.0.2</AssemblyVersion>
+    <FileVersion>1.0.2</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
