@@ -24,8 +24,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\parser-foundation\Parser\Parser.csproj" />
-    <ProjectReference Include="..\..\system-extensions\SystemExtensions.Standard\SystemExtensions.Standard.csproj" />
+    <PackageReference Include="Irvin.SystemExtensions" Version="1.2.1.1" />
+    <PackageReference Include="ParserFoundation" Version="1.0.1" />
   </ItemGroup>
 
 </Project>
