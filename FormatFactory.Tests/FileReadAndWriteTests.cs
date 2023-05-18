@@ -13,7 +13,7 @@ namespace TestProject
     {
         private string _temporaryFilename;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void RunFirstOnce()
         {
             _temporaryFilename = Path.GetTempFileName();

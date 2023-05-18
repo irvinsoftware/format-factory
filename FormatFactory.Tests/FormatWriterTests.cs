@@ -270,12 +270,18 @@ namespace TestProject
         }
 
         [Test]
-		[ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "The field 'Gorzo' has an invalid length (chars are only 1 character long)")]
 		public void Write_ThrowsException_IfCharDecoratedInappropriately()
 		{
 			BadE element = new BadE();
 
-			FormatWriter.Default.WriteSingle(element);
+			try
+			{
+				FormatWriter.Default.WriteSingle(element);
+			}
+			catch (InvalidUsageException actualException)
+			{
+				Assert.AreEqual("The field 'Gorzo' has an invalid length (chars are only 1 character long)", actualException.Message);
+			}
 		}
 
 		[Test]
@@ -350,7 +356,6 @@ namespace TestProject
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "A member cannot be a field and a sub-record (violator: 'Name')")]
 		public void Write_ThrowsException_IfFieldAndSubRecordsCombined()
 		{
 			List<ExampleA> elements = new List<ExampleA>
@@ -359,31 +364,49 @@ namespace TestProject
 					new ExampleA()
 				};
 
-			FormatWriter.Default.Write(elements);
+			try
+			{
+				FormatWriter.Default.Write(elements);
+			}
+			catch (InvalidUsageException actualException)
+			{
+				Assert.AreEqual("A member cannot be a field and a sub-record (violator: 'Name')", actualException.Message);
+			}
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "In strict mode, all members must be decorated.")]
 		public void Write_ThrowsException_IfInStrictMode_AndMemberNotDecorated()
 		{
 			FormatOptions writerOptions = new FormatOptions();
 			writerOptions.UseStrictMode = true;
-
 			StringBuilder container = new StringBuilder();
-			FormatWriter.Instance.WriteSingle(container, new Order(), writerOptions);
+
+			try
+			{
+				FormatWriter.Instance.WriteSingle(container, new Order(), writerOptions);
+			}
+			catch (InvalidUsageException actualException)
+			{
+				Assert.AreEqual("In strict mode, all members must be decorated.", actualException.Message);
+			}
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "Only types decorated as Records can be used.")]
 		public void Write_ThrowsException_IfTryingToWriteNonRecord()
 		{
 			StringBuilder container = new StringBuilder();
 
-			FormatWriter.Default.Write(container, new List<string> {"hi"});
+			try
+			{
+				FormatWriter.Default.Write(container, new List<string> {"hi"});
+			}
+			catch (InvalidUsageException actualException)
+			{
+				Assert.AreEqual("Only types decorated as Records can be used.", actualException.Message);
+			}
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "A member cannot be a field and a child element (violator: 'Name')")]
 		public void Write_ThrowsException_IfFieldAndChildrenCombined()
 		{
 			List<ExampleB> elements = new List<ExampleB>
@@ -392,11 +415,17 @@ namespace TestProject
 					new ExampleB()
 				};
 
-			FormatWriter.Instance.Write(elements);
+			try
+			{
+				FormatWriter.Instance.Write(elements);
+			}
+			catch (InvalidUsageException actualException)
+			{
+				Assert.AreEqual("A member cannot be a field and a child element (violator: 'Name')", actualException.Message);
+			}
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "A member cannot be a sub-record and a child element (violator: 'Name')")]
 		public void Write_ThrowsException_IfFieldAndSubRecordCombined()
 		{
 		    List<ExampleC> elements = new List<ExampleC>
@@ -405,7 +434,14 @@ namespace TestProject
 					new ExampleC()
 				};
 
-		    FormatWriter.Default.Write(elements);
+		    try
+		    {
+			    FormatWriter.Default.Write(elements);
+		    }
+		    catch (InvalidUsageException actualException)
+		    {
+			    Assert.AreEqual("A member cannot be a sub-record and a child element (violator: 'Name')", actualException.Message);
+		    }
 		}
 
 		[Test]
@@ -608,7 +644,6 @@ namespace TestProject
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidDataException), ExpectedMessage = "The field delimiter (',') was found in the content for field 'Description' in element #1.")]
 		public void Write_ThrowsException_IfEscapingNotAllowed()
 		{
 			Master element = new Master();
@@ -621,29 +656,48 @@ namespace TestProject
 			FormatOptions writerOptions = new FormatOptions();
 			writerOptions.AllowDelimitersAsEscapedContent = false;
 
-			FormatWriter.Default.WriteSingle(element, writerOptions);
+			try
+			{
+				FormatWriter.Default.WriteSingle(element, writerOptions);
+			}
+			catch (InvalidDataException actualException)
+			{
+				Assert.AreEqual("The field delimiter (',') was found in the content for field 'Description' in element #1.", actualException.Message);
+			}
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidDataException), ExpectedMessage = "The value of 'Goober' cannot exceed 10 characters.")]
 		public void Write_ThrowsException_IfSetToNotAllowTooLongValues()
 		{
 			Thing element = new Thing();
 			element.Goober = "1234567890123";
 			FormatOptions writerOptions = new FormatOptions();
 
-			FormatWriter.Instance.WriteSingle(element, writerOptions);
+			try
+			{
+				FormatWriter.Instance.WriteSingle(element, writerOptions);
+			}
+			catch (InvalidDataException actualException)
+			{
+				Assert.AreEqual("The value of 'Goober' cannot exceed 10 characters.", actualException.Message);
+			}
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "The maximum length of a field cannot be less than the minimum width.")]
 		public void Write_ThrowsException_IfWidthsNotDecoratedCorrectly()
 		{
 			BadD element = new BadD();
 			element.Gorzo = "9";
-
 			TextWriter writer = new StringWriter(new StringBuilder());
-			FormatWriter.Default.WriteSingle(writer, element);
+
+			try
+			{
+				FormatWriter.Default.WriteSingle(writer, element);
+			}
+			catch (InvalidUsageException actualException)
+			{
+				Assert.AreEqual("The maximum length of a field cannot be less than the minimum width.", actualException.Message);
+			}
 		}
 
 		[Test]

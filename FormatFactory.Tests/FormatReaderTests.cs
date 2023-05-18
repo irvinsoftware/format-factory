@@ -211,12 +211,18 @@ namespace TestProject
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidDataException), ExpectedMessage = "The header 'toad' was not recognized.")]
         public void Read_ThrowsException_TryingtoParseBareCsvFormat_ForComprehnsiveAttribute()
         {
             string input = "toad,\"gargalong\"" + Environment.NewLine + "\"zupa, toscana\",fletermouse";
 
-            FormatReader.Default.Read<Statement2>(input);
+            try
+            {
+                FormatReader.Default.Read<Statement2>(input);
+            }
+            catch (InvalidDataException actualException)
+            {
+                Assert.AreEqual("The header 'toad' was not recognized.", actualException.Message);
+            }
         }
 
         [Test]
@@ -253,48 +259,84 @@ namespace TestProject
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "The field 'Gorzo' has an invalid length (chars are only 1 character long)")]
         public void Read_ThrowsException_IfCharDecoratedInappropriately()
         {
-            FormatReader.Instance.ReadFromFile<BadE>(NON_DATA_FILE);
+            try
+            {
+                FormatReader.Instance.ReadFromFile<BadE>(NON_DATA_FILE);
+            }
+            catch (InvalidUsageException actualException)
+            {
+                Assert.AreEqual("The field 'Gorzo' has an invalid length (chars are only 1 character long)", actualException.Message);
+            }
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "A member cannot be a field and a sub-record (violator: 'Name')")]
         public void Read_ThrowsException_IfFieldAndSubRecordsCombined()
         {
-            FormatReader.Instance.ReadFromFile<ExampleA>(NON_DATA_FILE);
+            try
+            {
+                FormatReader.Instance.ReadFromFile<ExampleA>(NON_DATA_FILE);
+            }
+            catch (InvalidUsageException actualException)
+            {
+                Assert.AreEqual("A member cannot be a field and a sub-record (violator: 'Name')", actualException.Message);
+            }
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "In strict mode, all members must be decorated.")]
         public void Read_ThrowsException_IfInStrictMode_AndMemberNotDecorated()
         {
             FormatOptions readerOptions = new FormatOptions();
             readerOptions.UseStrictMode = true;
 
-            FormatReader.Default.ReadFromFile<Order>(NON_DATA_FILE, readerOptions);
+            try
+            {
+                FormatReader.Default.ReadFromFile<Order>(NON_DATA_FILE, readerOptions);
+            }
+            catch (InvalidUsageException actualException)
+            {
+                Assert.AreEqual("In strict mode, all members must be decorated.", actualException.Message);
+            }
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "Only types decorated as Records can be used.")]
         public void Read_ThrowsException_IfTryingToWriteNonRecord()
         {
-            FormatReader.Instance.ReadFromFile<string>(NON_DATA_FILE);
+            try
+            {
+                FormatReader.Instance.ReadFromFile<string>(NON_DATA_FILE);
+            }
+            catch (InvalidUsageException actualException)
+            {
+                Assert.AreEqual("Only types decorated as Records can be used.", actualException.Message);
+            }
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "A member cannot be a field and a child element (violator: 'Name')")]
         public void Read_ThrowsException_IfFieldAndChildrenCombined()
         {
-            FormatReader.Default.ReadFromFile<ExampleB>(NON_DATA_FILE);
+            try
+            {
+                FormatReader.Default.ReadFromFile<ExampleB>(NON_DATA_FILE);
+            }
+            catch (InvalidUsageException actualException)
+            {
+                Assert.AreEqual("A member cannot be a field and a child element (violator: 'Name')", actualException.Message);
+            }
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "A member cannot be a sub-record and a child element (violator: 'Name')")]
         public void Read_ThrowsException_IfFieldAndSubRecordCombined()
         {
-            FormatReader.Instance.ReadFromFile<ExampleC>(NON_DATA_FILE);
+            try
+            {
+                FormatReader.Instance.ReadFromFile<ExampleC>(NON_DATA_FILE);
+            }
+            catch (InvalidUsageException actualException)
+            {
+                Assert.AreEqual("A member cannot be a sub-record and a child element (violator: 'Name')", actualException.Message);
+            }
         }
 
         [Test]
@@ -311,12 +353,18 @@ namespace TestProject
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidDataException), ExpectedMessage = "The columns are not in the correct order.")]
         public void Read_Throws_IfOutputInIncorrectOrder_WhenOrderSpecified()
         {
             string content = "Total,OrderNumber,Ordered,ShipName\r\n36,ABCD1,12/31/2007,Tom Hardy 1\r\n";
 
-            FormatReader.Default.ReadSingle<Order3>(content);
+            try
+            {
+                FormatReader.Default.ReadSingle<Order3>(content);
+            }
+            catch (InvalidDataException actualException)
+            {
+                Assert.AreEqual("The columns are not in the correct order.", actualException.Message);
+            }
         }
 
         [Test]
@@ -374,33 +422,50 @@ namespace TestProject
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidDataException), ExpectedMessage = @"The value ' very\' cannot be converted to a Decimal (field 'Money').")]
         public void Read_ThrowsException_IfDataCannotBeMapped()
         {
             string input = "tom,dean,he's\\, very\\, cool,$1\\,234.45|~~~45;True|";
             FormatOptions readerOptions = new FormatOptions();
             readerOptions.AllowDelimitersAsEscapedContent = false;
 
-            FormatReader.Default.ReadSingle<Master>(input, readerOptions);
+            try
+            {
+                FormatReader.Default.ReadSingle<Master>(input, readerOptions);
+            }
+            catch (InvalidDataException actualException)
+            {
+                Assert.AreEqual(@"The value ' very\' cannot be converted to a Decimal (field 'Money').", actualException.Message);
+            }
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidDataException), ExpectedMessage = "The value of 'Goober' cannot exceed 10 characters.")]
         public void Read_ThrowsException_IfSetToNotAllowTooLongValues()
         {
-            FormatReader.Default.ReadSingle<Thing>("1234567890123");
+            try
+            {
+                FormatReader.Default.ReadSingle<Thing>("1234567890123");
+            }
+            catch (InvalidDataException actualException)
+            {
+                Assert.AreEqual("The value of 'Goober' cannot exceed 10 characters.", actualException.Message);
+            }
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "The maximum length of a field cannot be less than the minimum width.")]
         public void Read_ThrowsException_IfWidthsNotDecoratedCorrectly()
         {
-            FormatReader.Instance.ReadFromFile<BadD>(NON_DATA_FILE);
+            try
+            {
+                FormatReader.Instance.ReadFromFile<BadD>(NON_DATA_FILE);
+            }
+            catch (InvalidUsageException actualException)
+            {
+                Assert.AreEqual("The maximum length of a field cannot be less than the minimum width.", actualException.Message);
+            }
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidUsageException), ExpectedMessage = "Two or more child lists of the same type is not parseable.")]
-        public void Read_ThrowsException_ForUnparseableParentChildLists()
+        public void Read_ThrowsException_ForUnParseableParentChildLists()
         {
             string input = "Hardy,02091983|		Tom,Hardy,35.00|		Sheryl,Hardy,33.00|		Laurel,Hardy,4.00|		Tom Jr.,Hardy,8.00|";
 
@@ -418,7 +483,14 @@ namespace TestProject
             expected[0].Children.Add(new SimpleFooter { FirstName = "Laurel", LastName = "Hardy", Age = 4 });
             expected[0].Children.Add(new SimpleFooter { FirstName = "Tom Jr.", LastName = "Hardy", Age = 8 });
 
-            FormatReader.Default.Read<SimpleHeader>(input);
+            try
+            {
+                FormatReader.Default.Read<SimpleHeader>(input);
+            }
+            catch (InvalidUsageException actualException)
+            {
+                Assert.AreEqual("Two or more child lists of the same type is not parseable.", actualException.Message);
+            }
         }
     }
 }
