@@ -21,11 +21,23 @@
     <RepositoryUrl>https://github.com/irvinsoftware/format-factory</RepositoryUrl>
     <AssemblyVersion>1.0.2</AssemblyVersion>
     <FileVersion>1.0.2</FileVersion>
+    <Configurations>Debug;Release;DebugEverything</Configurations>
+    <Platforms>AnyCPU</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'DebugEverything' ">
+    <DebugSymbols Condition=" '$(DebugSymbols)' == '' ">true</DebugSymbols>
+    <Optimize Condition=" '$(Optimize)' == '' ">false</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Irvin.SystemExtensions" Version="1.2.1.1" />
-    <PackageReference Include="ParserFoundation" Version="1.0.1" />
+    <PackageReference Include="Irvin.SystemExtensions" Version="1.2.1.1" Condition=" '$(Configuration)' != 'DebugEverything' " />
+    <PackageReference Include="ParserFoundation" Version="1.0.1" Condition=" '$(Configuration)' != 'DebugEverything' " />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\parser-foundation\Parser\Parser.csproj" Condition=" '$(Configuration)' == 'DebugEverything' " />
+    <ProjectReference Include="..\..\system-extensions\SystemExtensions.Standard\SystemExtensions.Standard.csproj" Condition=" '$(Configuration)' == 'DebugEverything' " />
   </ItemGroup>
 
 </Project>
