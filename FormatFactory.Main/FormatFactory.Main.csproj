@@ -24,8 +24,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\parser-foundation\Parser\Parser.csproj" />
-    <ProjectReference Include="..\system-extensions\SystemExtensions.Standard\SystemExtensions.Standard.csproj" />
+    <ProjectReference Include="..\..\parser-foundation\Parser\Parser.csproj" />
+    <ProjectReference Include="..\..\system-extensions\SystemExtensions.Standard\SystemExtensions.Standard.csproj" />
   </ItemGroup>
 
 </Project>
