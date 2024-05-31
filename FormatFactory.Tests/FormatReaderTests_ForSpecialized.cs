@@ -272,8 +272,6 @@ namespace TestProject
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidDataException), 
-            ExpectedMessage = "The value 'R02' cannot be converted to a ReturnReasonCode (field 'ReturnReason').")]
         public void Read_ThrowsProperException_WhenDataCannotMap_ForComplexHeirarchy()
         {
             string sampleFile =
@@ -292,7 +290,14 @@ namespace TestProject
 820000000200041000120000000000000000000083681340922268                         041000120000003
 9000001000003000000200084000620000000692817000000007050                                       ";
 
-            FormatReader.Default.Read<ResponseFile>(sampleFile);
+            try
+            {
+                FormatReader.Default.Read<ResponseFile>(sampleFile);
+            }
+            catch (InvalidDataException actualException)
+            {
+                Assert.AreEqual("The value 'R02' cannot be converted to a ReturnReasonCode (field 'ReturnReason').", actualException.Message);
+            }
         }
 
         [Test]
