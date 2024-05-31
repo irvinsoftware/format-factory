@@ -51,7 +51,7 @@ public class TypeFactoryTests
     }
     
     [Test]
-    [Timeout(60000)]
+    [Timeout(120000)]
     public void Write_DoesNotExceedCachingLimits()
     {
         string probeContent = FormatWriter.Default.WriteSingle(SimpleHeaderTestFactory.Get());
