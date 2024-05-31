@@ -2,26 +2,27 @@
 using System.Collections.Generic;
 using Company.Entities;
 
-namespace TestProject;
-
-internal static class SimpleHeaderTestFactory
+namespace TestProject
 {
-    public static SimpleHeader Get()
+    internal static class SimpleHeaderTestFactory
     {
-        SimpleHeader simpleHeader = new SimpleHeader
+        public static SimpleHeader Get()
         {
-            FamilyName = "Hardy",
-            MarriageDate = new DateTime(1983, 2, 9),
-            Parents = new List<SimpleFooter>
+            SimpleHeader simpleHeader = new SimpleHeader
             {
-                new SimpleFooter { FirstName = "Tom", LastName = "Hardy", Age = 35},
-                new SimpleFooter { FirstName = "Sheryl", LastName = "Hardy", Age = 33},
-            }
-        };
+                FamilyName = "Hardy",
+                MarriageDate = new DateTime(1983, 2, 9),
+                Parents = new List<SimpleFooter>
+                {
+                    new SimpleFooter { FirstName = "Tom", LastName = "Hardy", Age = 35},
+                    new SimpleFooter { FirstName = "Sheryl", LastName = "Hardy", Age = 33},
+                }
+            };
 			
-        simpleHeader.Children.Add(new SimpleFooter { FirstName = "Laurel", LastName = "Hardy", Age = 4});
-        simpleHeader.Children.Add(new SimpleFooter { FirstName = "Tom Jr.", LastName = "Hardy", Age = 8 });
+            simpleHeader.Children.Add(new SimpleFooter { FirstName = "Laurel", LastName = "Hardy", Age = 4});
+            simpleHeader.Children.Add(new SimpleFooter { FirstName = "Tom Jr.", LastName = "Hardy", Age = 8 });
 			
-        return simpleHeader;
+            return simpleHeader;
+        }
     }
 }
