@@ -50,5 +50,7 @@ namespace Irvin.FormatFactory.Internal
         {
             return _memberTypeCache.GetOrAdd(memberInfo, member => member.MemberType);
         }
+
+        internal static int MembersCached => _memberTypeCache.Count;
     }
 }

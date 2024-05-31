@@ -704,18 +704,7 @@ namespace TestProject
 		public void Write_Writes_ForParentChildLists()
 		{
 			List<SimpleHeader> elements = new List<SimpleHeader>();
-			elements.Add(new SimpleHeader
-				{
-					FamilyName = "Hardy",
-					MarriageDate = new DateTime(1983, 2, 9),
-					Parents = new List<SimpleFooter>
-						{
-							new SimpleFooter { FirstName = "Tom", LastName = "Hardy", Age = 35},
-							new SimpleFooter { FirstName = "Sheryl", LastName = "Hardy", Age = 33},
-						}
-				});
-			elements[0].Children.Add(new SimpleFooter { FirstName = "Laurel", LastName = "Hardy", Age = 4});
-			elements[0].Children.Add(new SimpleFooter { FirstName = "Tom Jr.", LastName = "Hardy", Age = 8 });
+			elements.Add(SimpleHeaderTestFactory.Get());
 
 			string actual = FormatWriter.Instance.Write(elements);
 
@@ -723,7 +712,7 @@ namespace TestProject
 			Assert.AreEqual(expected, actual);
 		}
 
-	    [Test]
+		[Test]
 	    public void Write_WritesAllFixedWidth()
 	    {
 	        FixItFelix item = new FixItFelix();

@@ -11,6 +11,11 @@ namespace Irvin.FormatFactory.Internal.Member
             _fieldInfo = fieldInfo;
         }
 
+        public override int GetHashCode()
+        {
+            return _fieldInfo.GetHashCode();
+        }
+
         public bool Equals(IMemberInfo other)
         {
             FieldInfoWrapper otherField = other as FieldInfoWrapper;

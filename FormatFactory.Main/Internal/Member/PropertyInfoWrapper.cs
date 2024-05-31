@@ -12,6 +12,11 @@ namespace Irvin.FormatFactory.Internal.Member
             _propertyInfo = propertyInfo;
         }
 
+        public override int GetHashCode()
+        {
+            return _propertyInfo.GetHashCode();
+        }
+
         public bool Equals(IMemberInfo other)
         {
             PropertyInfoWrapper other2 = other as PropertyInfoWrapper;

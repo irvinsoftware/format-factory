@@ -29,6 +29,10 @@
     <DebugSymbols Condition=" '$(DebugSymbols)' == '' ">true</DebugSymbols>
     <Optimize Condition=" '$(Optimize)' == '' ">false</Optimize>
   </PropertyGroup>
+  
+  <ItemGroup Condition=" '$(Configuration)' != 'Release' ">
+    <InternalsVisibleTo Include="FormatFactory.Tests" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Irvin.SystemExtensions" Version="1.2.1.1" Condition=" '$(Configuration)' != 'DebugEverything' " />
