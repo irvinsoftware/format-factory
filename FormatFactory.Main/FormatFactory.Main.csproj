@@ -1,34 +1,39 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Irvin.FormatFactory</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>FormatFactory</PackageId>
-    <Authors>Irvin Software Products, LLC</Authors>
+    <Authors>Nate Irvin</Authors>
     <Company>Irvin Software Products, LLC</Company>
     <Product>FormatFactory</Product>
-    <Description>The best tool for building and parsing flat file formats (e.g., EDI, CSV, NATCHA, etc.)</Description>
-    <Copyright>© 2013-2022 Irvin Software Products LLC</Copyright>
+    <Description>The best framework for building and parsing flat file formats (e.g., EDI, CSV, NATCHA, etc.)</Description>
+    <Copyright>© 2013-2024 Nate Irvin</Copyright>
     <PackageProjectUrl>https://github.com/irvinsoftware/format-factory</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <PackageReleaseNotes>Additional CSV support</PackageReleaseNotes>
+    <PackageReleaseNotes>fix performance issue</PackageReleaseNotes>
     <AssemblyName>FormatFactory</AssemblyName>
     <DebugType>Full</DebugType>
-    <PackageVersion>1.0.2</PackageVersion>
+    <PackageVersion>1.1.1</PackageVersion>
     <PackageLicenseUrl>https://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/irvinsoftware/format-factory</RepositoryUrl>
     <AssemblyVersion>1.0.2</AssemblyVersion>
     <FileVersion>1.0.2</FileVersion>
     <Configurations>Debug;Release;DebugEverything</Configurations>
     <Platforms>AnyCPU</Platforms>
+    <TargetFrameworks>netstandard2.1;netstandard2.0</TargetFrameworks>
+    <PackageIcon>logo.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'DebugEverything' ">
     <DebugSymbols Condition=" '$(DebugSymbols)' == '' ">true</DebugSymbols>
     <Optimize Condition=" '$(Optimize)' == '' ">false</Optimize>
   </PropertyGroup>
+  
+  <ItemGroup Condition=" '$(Configuration)' != 'Release' ">
+    <InternalsVisibleTo Include="FormatFactory.Tests" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Irvin.SystemExtensions" Version="1.2.1.1" Condition=" '$(Configuration)' != 'DebugEverything' " />
@@ -38,6 +43,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\parser-foundation\Parser\Parser.csproj" Condition=" '$(Configuration)' == 'DebugEverything' " />
     <ProjectReference Include="..\..\system-extensions\SystemExtensions.Standard\SystemExtensions.Standard.csproj" Condition=" '$(Configuration)' == 'DebugEverything' " />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="logo.png" Pack="true" PackagePath=""/>
   </ItemGroup>
 
 </Project>

@@ -12,6 +12,11 @@ namespace Irvin.FormatFactory.Internal.Member
             _columnInfo = columnInfo;
         }
 
+        public override int GetHashCode()
+        {
+            return _columnInfo.GetHashCode();
+        }
+
         public bool Equals(IMemberInfo other)
         {
             DataColumnWrapper otherMember = other as DataColumnWrapper;
