@@ -65,8 +65,8 @@ namespace TestProject
 
 			 Assert.AreEqual(
 				 "ISA*00*          *00*          *30*615156491      *ZZ*EYEMED         *080125*0738*^*00501*000000004*0*T*:~" + Environment.NewLine +
-				 "4~" + Environment.NewLine +
-				 "OOOOH~" + Environment.NewLine +
+				 "4~\r\n" +
+				 "OOOOH~\r\n" +
 				 "IEA*1*000000004~" + Environment.NewLine,
 				 actual);
 		 }

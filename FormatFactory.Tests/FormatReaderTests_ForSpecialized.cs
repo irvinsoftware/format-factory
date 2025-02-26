@@ -44,14 +44,15 @@ namespace TestProject
         [Test]
         public void Read_ReadHierarchicalElements_ForMultipleNesting()
         {
+            string newLine = "\r\n";
             string input =
                 "ISA*00*          *00*          *30*615156491      *ZZ*EYEMED         *080125*0738*^*00501*000000004*0*T*:~" +
-                Environment.NewLine +
-                "4~" + Environment.NewLine +
-                "OOOOH~" + Environment.NewLine +
-                "IEA*1*000000004~" + Environment.NewLine;
+                newLine +
+                "4~" + newLine +
+                "OOOOH~" + newLine +
+                "IEA*1*000000004~" + newLine;
             FormatOptions readerOptions = new FormatOptions();
-            readerOptions.RecordDelimiter = "~" + Environment.NewLine;
+            readerOptions.RecordDelimiter = "~" + newLine;
             readerOptions.FieldDelimiter = "*";
 
             InterchangeControlLoop expected = new InterchangeControlLoop();
@@ -79,7 +80,7 @@ namespace TestProject
         [Test]
         public void Read_ReadsDesiredResult_ForInheritedInterchangeControlLoop()
         {
-            string input = "ISA*00*          *00*          *30*615156491      *ZZ*EYEMED         *080125*0738*^*00501*000000004*0*T*:~" + Environment.NewLine;
+            string input = "ISA*00*          *00*          *30*615156491      *ZZ*EYEMED         *080125*0738*^*00501*000000004*0*T*:~\r\n";
 
             Company.Entities.Inherited.InterchangeControlLoop expected = new Company.Entities.Inherited.InterchangeControlLoop();
             expected.InterchangeSenderID = 615156491;
@@ -97,7 +98,7 @@ namespace TestProject
         [Test]
         public void Read_ReadsDesiredResult_ForInheritedInterchangeControlTrailer()
         {
-            string input = "IEA*1*000000004~" + Environment.NewLine;
+            string input = "IEA*1*000000004~\r\n";
 
             Company.Entities.Inherited.InterchangeControlTrailer expected = new Company.Entities.Inherited.InterchangeControlTrailer();
             expected.FunctionalGroupCount = 1;
@@ -112,7 +113,7 @@ namespace TestProject
         [Test]
         public void Read_ReadsDesiredResult_ForInheritedFunctionalGroupTrailer()
         {
-            string input = "GE*1*40001~" + Environment.NewLine;
+            string input = "GE*1*40001~\r\n";
 
             FunctionalGroupTrailer expected = new FunctionalGroupTrailer();
             expected.TransactionSetCount = 1;
@@ -126,7 +127,7 @@ namespace TestProject
         [Test]
         public void Read_ReadsTheDesiredResult_ForInheritedTransactionSegmentTrailer()
         {
-            string input = "SE*41*0001~" + Environment.NewLine;
+            string input = "SE*41*0001~\r\n";
 
             TransactionSegmentTrailer expected = new TransactionSegmentTrailer();
             expected.SegmentCount = 41;
@@ -140,7 +141,7 @@ namespace TestProject
         [Test]
         public void Read_ReadsDesiredResult_ForInheritedSalesTaxSegment()
         {
-            string input = "AMT*T*3.5~" + Environment.NewLine;
+            string input = "AMT*T*3.5~\r\n";
 
             SalesTaxSegment expected = new SalesTaxSegment();
             expected.MonetaryAmount = 3.50m;
@@ -153,7 +154,7 @@ namespace TestProject
         [Test]
         public void Read_ReadsDesiredResult_ForInterchangeControlLoop()
         {
-            string input = "ISA*00*          *00*          *30*615156491      *ZZ*EYEMED         *080125*0738*^*00501*000000004*0*T*:~" + Environment.NewLine;
+            string input = "ISA*00*          *00*          *30*615156491      *ZZ*EYEMED         *080125*0738*^*00501*000000004*0*T*:~\r\n";
 
             Company.Entities.MostExplicit.InterchangeControlLoop expected = new Company.Entities.MostExplicit.InterchangeControlLoop();
             expected.InterchangeSenderID = 615156491;
@@ -170,7 +171,7 @@ namespace TestProject
         [Test]
         public void Read_ReadsDesiredResult_ForFieldThatHasTheRightMaxLengthAlready()
         {
-            string input = "ISA*00*          *00*          *30*615156491      *ZZ*EYEMED         *080125*0738*^*00501*123456789*0*T*:~" + Environment.NewLine;
+            string input = "ISA*00*          *00*          *30*615156491      *ZZ*EYEMED         *080125*0738*^*00501*123456789*0*T*:~\r\n";
 
             Company.Entities.MostExplicit.InterchangeControlLoop expected = new Company.Entities.MostExplicit.InterchangeControlLoop();
             expected.InterchangeSenderID = 615156491;
@@ -187,7 +188,7 @@ namespace TestProject
         [Test]
         public void Read_ReadsDesiredResult_ForInterchangeControlTrailer()
         {
-            string input = "IEA*1*000000004~" + Environment.NewLine;
+            string input = "IEA*1*000000004~\r\n";
 
             Company.Entities.MostExplicit.InterchangeControlTrailer expected = new Company.Entities.MostExplicit.InterchangeControlTrailer();
             expected.FunctionalGroupCount = 1;
@@ -201,7 +202,7 @@ namespace TestProject
         [Test]
         public void Read_ReadsDesiredResult_ForFunctionalGroupTrailer()
         {
-            string input = "GE*1*40001~" + Environment.NewLine;
+            string input = "GE*1*40001~\r\n";
 
             Company.Entities.MostExplicit.FunctionalGroupTrailer expected = new Company.Entities.MostExplicit.FunctionalGroupTrailer();
             expected.TransactionSetCount = 1;
@@ -215,7 +216,7 @@ namespace TestProject
         [Test]
         public void Read_ReadsDesiredResult_ForTransactionSegmentTrailer()
         {
-            string input = "SE*41*0001~" + Environment.NewLine;
+            string input = "SE*41*0001~\r\n";
 
             Company.Entities.MostExplicit.TransactionSegmentTrailer expected = new Company.Entities.MostExplicit.TransactionSegmentTrailer();
             expected.SegmentCount = 41;
@@ -229,7 +230,7 @@ namespace TestProject
         [Test]
         public void Read_ReadsDesiredResult_ForSalesTaxSegment()
         {
-            string input = "AMT*T*3.5~" + Environment.NewLine;
+            string input = "AMT*T*3.5~\r\n";
 
             Company.Entities.MostExplicit.SalesTaxSegment expected = new Company.Entities.MostExplicit.SalesTaxSegment();
             expected.MonetaryAmount = 3.50m;
@@ -379,6 +380,7 @@ namespace TestProject
 820000000700294002170000000094000000000070501471034885                         242071750000001
 9000001000003000000200084000620000000692817000000007050                                       
 ";
+            sampleFile = sampleFile.Replace("\r\n", Environment.NewLine);
 
             List<NachaFile> actual = FormatReader.Default.Read<NachaFile>(sampleFile);
 

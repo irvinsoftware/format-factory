@@ -13,7 +13,7 @@ namespace Company.Entities
         float Amount { get; set; }
     }
 
-    [Record(IncludeHeaders = true, FieldDelimiter = ",", RecordDelimiter = "\r\n")]
+    [Record(IncludeHeaders = true, FieldDelimiter = ",", RecordDelimiter = "\n")]
     public class Person : IPerson
     {
         [Field(Name = "Given Name")]

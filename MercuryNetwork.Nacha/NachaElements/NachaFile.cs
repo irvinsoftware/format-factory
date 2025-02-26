@@ -6,7 +6,7 @@ namespace Company.Nacha.NachaElements
 	[Record(FieldDelimiter = "", RecordDelimiter = "",  UseTrailingDelimiter = false)]
 	public class NachaFile
 	{
-		[ChildElement(Order = 1,IndentCharacters = "", IsRequired = true)]
+		[ChildElement(Order = 1, IndentCharacters = "", IsRequired = true)]
 		public FileHeaderRecord FileHeaderRecord { get; set; }
 
 		[ChildElement(Order = 2, IndentCharacters = "", IsRequired = true)]
