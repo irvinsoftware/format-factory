@@ -13,17 +13,32 @@ namespace TestProject
     [TestFixture]
     public class FormatReaderTests
     {
-        private const string NON_DATA_FILE = @"c:\windows\system32\drivers\etc\hosts";
+        private string _nonDataFilePath = @"c:\windows\system32\drivers\etc\hosts";
 
-        [TestCase(typeof(Person))]
-        [TestCase(typeof(Person2))]
-        public void Read_ReadsEscapedHeaders_ForCsvWithUniversalQuoting(Type recordType)
+        [OneTimeSetUp]
+        public void RunFirstOnce()
+        {
+            if (Environment.OSVersion.Platform.ToString().StartsWith("Win"))
+            {
+                _nonDataFilePath = @"c:\windows\system32\drivers\etc\hosts";
+            }
+            else
+            {
+                _nonDataFilePath = "/etc/hosts";
+            }
+        }
+
+        [TestCase("\n", typeof(Person))]
+        [TestCase("\n", typeof(Person2))]
+        [TestCase("\r\n", typeof(Person))]
+        [TestCase("\r\n", typeof(Person2))]
+        public void Read_ReadsEscapedHeaders_ForCsvWithUniversalQuoting(string newLine, Type recordType)
         {
             string content =
-                "\"Given Name\",\"Family Name\",\"Age\",\"State,Province\",\"Created\",\"Balance (USD)\"" + Environment.NewLine +
-                "\"Fred\",\"Flinstone\",\"25\",\"UT\",\"1/5/2017\",\"159.36\"" + Environment.NewLine +
-                "\"Anna-Marie\",\"Sadler\",\"55\",\"AB\",\"2/9/2016 15:33:01\",\"-45.02\"" + Environment.NewLine +
-                "\"Michael\",\"Van Dusen\",\"2\",\"CA\",\"7/6/2016 3:00 PM\",\"34\"" + Environment.NewLine;
+                "\"Given Name\",\"Family Name\",\"Age\",\"State,Province\",\"Created\",\"Balance (USD)\"" + newLine +
+                "\"Fred\",\"Flinstone\",\"25\",\"UT\",\"1/5/2017\",\"159.36\"" + newLine +
+                "\"Anna-Marie\",\"Sadler\",\"55\",\"AB\",\"2/9/2016 15:33:01\",\"-45.02\"" + newLine +
+                "\"Michael\",\"Van Dusen\",\"2\",\"CA\",\"7/6/2016 3:00 PM\",\"34\"" + newLine;
             FormatOptions options = new FormatOptions {EscapeKind = EscapeKind.DoubleQuote};
 
             List<IPerson> actual = ParseForPersons(recordType, content, options);
@@ -88,17 +103,21 @@ namespace TestProject
             Assert.AreEqual(34F, actual[2].Amount);
         }
 
-        [TestCase(typeof(Person), "State,Province")]
-        [TestCase(typeof(Person2), "State,Province")]
-        [TestCase(typeof(Person3), "State/Province")]
-        [TestCase(typeof(Person4), "State/Province")]
-        public void Read_ReadsEscapedHeaders_ForCsv_HeaderQuotingOnly(Type recordType, string header)
+        [TestCase("\n", typeof(Person), "State,Province")]
+        [TestCase("\n", typeof(Person2), "State,Province")]
+        [TestCase("\n", typeof(Person3), "State/Province")]
+        [TestCase("\n", typeof(Person4), "State/Province")]
+        [TestCase("\r\n", typeof(Person), "State,Province")]
+        [TestCase("\r\n", typeof(Person2), "State,Province")]
+        [TestCase("\r\n", typeof(Person3), "State/Province")]
+        [TestCase("\r\n", typeof(Person4), "State/Province")]
+        public void Read_ReadsEscapedHeaders_ForCsv_HeaderQuotingOnly(string newLine, Type recordType, string header)
         {
             string content =
-               $"Given Name,Family Name,Age,\"{header}\",Created,Balance (USD)" + Environment.NewLine +
-                "Fred,Flinstone,25,UT,1/5/2017,159.36" + Environment.NewLine +
-                "Anna-Marie,Sadler,55,AB,2/9/2016 15:33:01,-45.02" + Environment.NewLine +
-                "Michael,Van Dusen,2,CA,7/6/2016 3:00 PM,34" + Environment.NewLine;
+               $"Given Name,Family Name,Age,\"{header}\",Created,Balance (USD)" + newLine +
+                "Fred,Flinstone,25,UT,1/5/2017,159.36" + newLine +
+                "Anna-Marie,Sadler,55,AB,2/9/2016 15:33:01,-45.02" + newLine +
+                "Michael,Van Dusen,2,CA,7/6/2016 3:00 PM,34" + newLine;
             FormatOptions options = new FormatOptions { EscapeKind = EscapeKind.DoubleQuote };
 
             List<IPerson> actual = ParseForPersons(recordType, content, options);
@@ -127,17 +146,21 @@ namespace TestProject
             Assert.AreEqual(34F, actual[2].Amount);
         }
 
-        [TestCase(typeof(Person), "State,Province")]
-        [TestCase(typeof(Person2), "State,Province")]
-        [TestCase(typeof(Person3), "State/Province")]
-        [TestCase(typeof(Person4), "State/Province")]
-        public void Read_ReadsEscapedHeaders_ForCsvMinimalQuoting(Type recordType, string header)
+        [TestCase("\n", typeof(Person), "State,Province")]
+        [TestCase("\n", typeof(Person2), "State,Province")]
+        [TestCase("\n", typeof(Person3), "State/Province")]
+        [TestCase("\n", typeof(Person4), "State/Province")]
+        [TestCase("\r\n", typeof(Person), "State,Province")]
+        [TestCase("\r\n", typeof(Person2), "State,Province")]
+        [TestCase("\r\n", typeof(Person3), "State/Province")]
+        [TestCase("\r\n", typeof(Person4), "State/Province")]
+        public void Read_ReadsEscapedHeaders_ForCsvMinimalQuoting(string newLine, Type recordType, string header)
         {
             string content =
-               $"Given Name,Family Name,Age,\"{header}\",Created,Balance (USD)" + Environment.NewLine +
-                "Fred,Flinstone,25,UT,1/5/2017,159.36" + Environment.NewLine +
-                "Anna-Marie,Sadler,55,AB,2/9/2016 15:33:01,\"1,245.02\"" + Environment.NewLine +
-                "Michael,Van Dusen,2,\"Q,\",7/6/2016 3:00 PM,34" + Environment.NewLine;
+               $"Given Name,Family Name,Age,\"{header}\",Created,Balance (USD)" + newLine +
+                "Fred,Flinstone,25,UT,1/5/2017,159.36" + newLine +
+                "Anna-Marie,Sadler,55,AB,2/9/2016 15:33:01,\"1,245.02\"" + newLine +
+                "Michael,Van Dusen,2,\"Q,\",7/6/2016 3:00 PM,34" + newLine;
             FormatOptions options = new FormatOptions { EscapeKind = EscapeKind.DoubleQuote };
 
             List<IPerson> actual = ParseForPersons(recordType, content, options);
@@ -194,10 +217,11 @@ namespace TestProject
             return persons.ToList();
         }
 
-        [Test]
-        public void Read_CanParseBareCsvFormat()
+        [TestCase("\n")]
+        [TestCase("\r\n")]
+        public void Read_CanParseBareCsvFormat(string newLine)
         {
-            string input = "toad,\"gargalong\"" + Environment.NewLine + "\"zupa, toscana\",fletermouse";
+            string input = "toad,\"gargalong\"" + newLine + "\"zupa, toscana\",fletermouse";
             FormatOptions options = new FormatOptions();
             options.EscapeKind = EscapeKind.DoubleQuote;
 
@@ -263,7 +287,7 @@ namespace TestProject
         {
             try
             {
-                FormatReader.Instance.ReadFromFile<BadE>(NON_DATA_FILE);
+                FormatReader.Instance.ReadFromFile<BadE>(_nonDataFilePath);
             }
             catch (InvalidUsageException actualException)
             {
@@ -276,7 +300,7 @@ namespace TestProject
         {
             try
             {
-                FormatReader.Instance.ReadFromFile<ExampleA>(NON_DATA_FILE);
+                FormatReader.Instance.ReadFromFile<ExampleA>(_nonDataFilePath);
             }
             catch (InvalidUsageException actualException)
             {
@@ -292,7 +316,7 @@ namespace TestProject
 
             try
             {
-                FormatReader.Default.ReadFromFile<Order>(NON_DATA_FILE, readerOptions);
+                FormatReader.Default.ReadFromFile<Order>(_nonDataFilePath, readerOptions);
             }
             catch (InvalidUsageException actualException)
             {
@@ -305,7 +329,7 @@ namespace TestProject
         {
             try
             {
-                FormatReader.Instance.ReadFromFile<string>(NON_DATA_FILE);
+                FormatReader.Instance.ReadFromFile<string>(_nonDataFilePath);
             }
             catch (InvalidUsageException actualException)
             {
@@ -318,7 +342,7 @@ namespace TestProject
         {
             try
             {
-                FormatReader.Default.ReadFromFile<ExampleB>(NON_DATA_FILE);
+                FormatReader.Default.ReadFromFile<ExampleB>(_nonDataFilePath);
             }
             catch (InvalidUsageException actualException)
             {
@@ -331,7 +355,7 @@ namespace TestProject
         {
             try
             {
-                FormatReader.Instance.ReadFromFile<ExampleC>(NON_DATA_FILE);
+                FormatReader.Instance.ReadFromFile<ExampleC>(_nonDataFilePath);
             }
             catch (InvalidUsageException actualException)
             {
@@ -456,7 +480,7 @@ namespace TestProject
         {
             try
             {
-                FormatReader.Instance.ReadFromFile<BadD>(NON_DATA_FILE);
+                FormatReader.Instance.ReadFromFile<BadD>(_nonDataFilePath);
             }
             catch (InvalidUsageException actualException)
             {

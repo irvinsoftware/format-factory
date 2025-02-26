@@ -266,7 +266,7 @@ namespace TestProject
 
             string actual = FormatWriter.Instance.WriteSingle(element);
 
-            Assert.AreEqual("ABCD;Ordinal;1;InvariantCulture\r\n", actual);
+            Assert.AreEqual("ABCD;Ordinal;1;InvariantCulture" + Environment.NewLine, actual);
         }
 
         [Test]
@@ -352,7 +352,7 @@ namespace TestProject
 
 			string actual = FormatWriter.Instance.WriteSingle(element);
 
-			Assert.AreEqual("ISA*00*          *00*          *30*615156491      *ZZ*EYEMED         *080125*0738*^*00501*000000004*0*T*:~" + Environment.NewLine, actual);
+			Assert.AreEqual("ISA*00*          *00*          *30*615156491      *ZZ*EYEMED         *080125*0738*^*00501*000000004*0*T*:~\r\n", actual);
 		}
 
 		[Test]
@@ -495,7 +495,7 @@ namespace TestProject
 
             string actual = FormatWriter.Default.WriteSingle(subject, options);
 
-            Assert.AreEqual("OrderNumber,ShippingName,Ordered,OrderTotal\r\nABCD1,Tom Hardy 1,12/31/2007,36" + Environment.NewLine, actual);
+            Assert.AreEqual("OrderNumber,ShippingName,Ordered,OrderTotal"+Environment.NewLine+"ABCD1,Tom Hardy 1,12/31/2007,36" + Environment.NewLine, actual);
         }
 
         [Test]
@@ -505,7 +505,7 @@ namespace TestProject
 
             string actual = FormatWriter.Instance.WriteSingle(subject);
 
-            Assert.AreEqual("OrderNumber,ShipName,Ordered,Total\r\nABCD1,Tom Hardy 1,12/31/2007,36\r\n", actual);
+            Assert.AreEqual("OrderNumber,ShipName,Ordered,Total"+Environment.NewLine+"ABCD1,Tom Hardy 1,12/31/2007,36" + Environment.NewLine, actual);
         }
 
         [Test]
@@ -530,7 +530,7 @@ namespace TestProject
 
             string actual = FormatWriter.Instance.WriteSingle(subject, options);
 
-            Assert.AreEqual("OrderNumber,ShipName,Ordered,Total\r\nABCD1,Tom Hardy 1,12/31/2007,36\r\n", actual);
+            Assert.AreEqual("OrderNumber,ShipName,Ordered,Total"+Environment.NewLine+"ABCD1,Tom Hardy 1,12/31/2007,36" + Environment.NewLine, actual);
         }
 
         [Test]
@@ -545,7 +545,11 @@ namespace TestProject
 
             string actual = FormatWriter.Default.WriteSingle(subject, options);
 
-            Assert.AreEqual("OrderNumber,ShipName,Ordered,Total\r\nABCD1,Tom Hardy 1,12/31/2007,36\r\n", actual);
+            Assert.AreEqual("OrderNumber,ShipName,Ordered,Total" +
+                            Environment.NewLine +
+                            "ABCD1,Tom Hardy 1,12/31/2007,36" + 
+                            Environment.NewLine, 
+	            actual);
         }
 
         [Test]
@@ -722,7 +726,7 @@ namespace TestProject
 
 	        string actual = FormatWriter.Default.WriteSingle(item);
 
-            Assert.AreEqual("0000290348Ralph Nader                   23.3      \r\n", actual);
+            Assert.AreEqual("0000290348Ralph Nader                   23.3      " + Environment.NewLine, actual);
 	    }
 	}
 }

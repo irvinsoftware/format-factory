@@ -2,7 +2,7 @@
 
 namespace Company.Entities
 {
-    [Record(RecordDelimiter = "\r\n", FieldDelimiter = ",")]
+    [Record(RecordDelimiter = "\n", FieldDelimiter = ",")]
     public class Statement
     {
         [Field]

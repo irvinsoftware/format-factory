@@ -20,7 +20,7 @@ namespace TestProject
 
 			string actual = FormatWriter.Instance.WriteSingle(element);
 
-			Assert.AreEqual("ISA*00*          *00*          *30*615156491      *ZZ*EYEMED         *080125*0738*^*00501*000000004*0*T*:~" + Environment.NewLine, actual);
+			Assert.AreEqual("ISA*00*          *00*          *30*615156491      *ZZ*EYEMED         *080125*0738*^*00501*000000004*0*T*:~\r\n", actual);
 		}
 
 		[Test]
@@ -35,7 +35,7 @@ namespace TestProject
 
 			string actual = FormatWriter.Instance.WriteSingle(element);
 
-			Assert.AreEqual("ISA*00*          *00*          *30*615156491      *ZZ*EYEMED         *080125*0738*^*00501*123456789*0*T*:~" + Environment.NewLine, actual);
+			Assert.AreEqual("ISA*00*          *00*          *30*615156491      *ZZ*EYEMED         *080125*0738*^*00501*123456789*0*T*:~\r\n", actual);
 		}
 
 		[Test]
@@ -47,7 +47,7 @@ namespace TestProject
 
 			string actual = FormatWriter.Instance.WriteSingle(element);
 
-			Assert.AreEqual("IEA*1*000000004~" + Environment.NewLine, actual);
+			Assert.AreEqual("IEA*1*000000004~\r\n", actual);
 		}
 
 		[Test]
@@ -59,7 +59,7 @@ namespace TestProject
 
 			string actual = FormatWriter.Instance.WriteSingle(element);
 
-			Assert.AreEqual("GE*1*40001~" + Environment.NewLine, actual);
+			Assert.AreEqual("GE*1*40001~\r\n", actual);
 		}
 
 		[Test]
@@ -71,7 +71,7 @@ namespace TestProject
 
 			string actual = FormatWriter.Instance.WriteSingle(element);
 
-			Assert.AreEqual("SE*41*0001~" + Environment.NewLine, actual);
+			Assert.AreEqual("SE*41*0001~\r\n", actual);
 		}
 
 		[Test]
@@ -82,7 +82,7 @@ namespace TestProject
 
 			string actual = FormatWriter.Instance.WriteSingle(element);
 
-			Assert.AreEqual("AMT*T*3.5~" + Environment.NewLine, actual);
+			Assert.AreEqual("AMT*T*3.5~\r\n", actual);
 		}
 	}
 }
