@@ -56,7 +56,7 @@ namespace TestProject
         {
             string probeContent = FormatWriter.Default.WriteSingle(SimpleHeaderTestFactory.Get());
             Assert.AreNotEqual(0, probeContent.Length);
-            int expectedTypeCount = TypeFactory.NumberOfTypesCached;
+            int expectedTypeCount = Irvin.Extensions.Reflection.TypeFactory.NumberOfTypesCached;
             int expectedMemberCount = TypeFactory.TotalMembersCached;
 
             Stopwatch st = new Stopwatch();
@@ -75,7 +75,7 @@ namespace TestProject
                 Console.WriteLine(st.Elapsed.ToString());
                 st.Reset();
             
-                Assert.AreEqual(expectedTypeCount, TypeFactory.NumberOfTypesCached);
+                Assert.AreEqual(expectedTypeCount, Irvin.Extensions.Reflection.TypeFactory.NumberOfTypesCached);
                 Assert.AreEqual(expectedMemberCount, TypeFactory.TotalMembersCached);
                 Assert.AreNotEqual(0, content.Length);
             }

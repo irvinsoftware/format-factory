@@ -114,7 +114,7 @@ namespace Irvin.FormatFactory.Internal
             List<IOrderedMemberInfo> memberInfos = new List<IOrderedMemberInfo>();
 
             int decorations = 0;
-            IEnumerable<MemberInfo> typeMembers = TypeFactory.GetTypeMembers(elementType);
+            IEnumerable<MemberInfo> typeMembers = Extensions.Reflection.TypeFactory.GetTypeMembers(elementType);
             foreach (MemberInfo typeMember in typeMembers)
             {
                 SubElementTemplate template = _memberTemplateCache.GetOrAdd(typeMember, memberInfo => new SubElementTemplate(memberInfo));
