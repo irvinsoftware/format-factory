@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using Irvin.Extensions.Reflection;
 
 namespace Irvin.FormatFactory.Internal.Member
 {
@@ -34,6 +35,11 @@ namespace Irvin.FormatFactory.Internal.Member
         public string Name => _columnInfo.ColumnName;
         public Type MemberType => _columnInfo.DataType;
         public IMemberContainer Container => new DataTableInfo(_columnInfo.Table);
+        public bool IsPublic => throw new NotImplementedException();
+        public bool IsInternalNotProtected  => throw new NotImplementedException();
+        public bool IsProtectedInternal => throw new NotImplementedException();
+        public bool IsProtectedNotPrivate => throw new NotImplementedException();
+        public bool IsPrivateNotProtected => throw new NotImplementedException();
 
         public bool SetValue(object target, object value)
         {

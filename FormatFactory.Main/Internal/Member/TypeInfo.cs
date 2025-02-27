@@ -1,4 +1,5 @@
 ﻿using System;
+using Irvin.Extensions.Reflection;
 
 namespace Irvin.FormatFactory.Internal.Member
 {

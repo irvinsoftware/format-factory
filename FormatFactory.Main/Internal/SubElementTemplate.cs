@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Irvin.Extensions;
+using Irvin.Extensions.Reflection;
 using Irvin.FormatFactory.Internal.Member;
 
 namespace Irvin.FormatFactory.Internal

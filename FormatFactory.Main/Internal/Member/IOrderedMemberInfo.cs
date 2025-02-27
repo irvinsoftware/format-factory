@@ -1,4 +1,6 @@
-﻿namespace Irvin.FormatFactory.Internal.Member
+﻿using Irvin.Extensions.Reflection;
+
+namespace Irvin.FormatFactory.Internal.Member
 {
 	internal interface IOrderedMemberInfo
 	{

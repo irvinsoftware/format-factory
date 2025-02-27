@@ -7,9 +7,11 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Irvin.Extensions;
+using Irvin.Extensions.Reflection;
 using Irvin.FormatFactory.Internal;
 using Irvin.FormatFactory.Internal.Member;
 using Irvin.Parser;
+using TypeFactory = Irvin.FormatFactory.Internal.TypeFactory;
 
 namespace Irvin.FormatFactory
 {

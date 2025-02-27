@@ -9,6 +9,13 @@
         <RootNamespace>TestProject</RootNamespace>
         <OutputType>Library</OutputType>
         <TargetFramework>net8.0</TargetFramework>
+        <Configurations>Debug;Release;DebugEverything</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'DebugEverything' ">
+      <DebugSymbols Condition=" '$(DebugSymbols)' == '' ">true</DebugSymbols>
+      <Optimize Condition=" '$(Optimize)' == '' ">false</Optimize>
     </PropertyGroup>
 
     <ItemGroup>
@@ -33,6 +40,14 @@
       <Content Include="EDI_SAMPLE.csv">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
-    </ItemGroup>    
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Irvin.SystemExtensions" Version="1.2.1.1" Condition=" '$(Configuration)' != 'DebugEverything' " />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\system-extensions\SystemExtensions.Standard\SystemExtensions.Standard.csproj" Condition=" '$(Configuration)' == 'DebugEverything' " />
+    </ItemGroup>
 
 </Project>

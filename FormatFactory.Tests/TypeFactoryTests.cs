@@ -4,10 +4,11 @@ using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using Company.Entities;
+using Irvin.Extensions.Reflection;
 using Irvin.FormatFactory;
-using Irvin.FormatFactory.Internal;
 using Irvin.FormatFactory.Internal.Member;
 using NUnit.Framework;
+using TypeFactory = Irvin.FormatFactory.Internal.TypeFactory;
 
 namespace TestProject
 {

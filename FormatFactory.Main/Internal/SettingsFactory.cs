@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using Irvin.Extensions;
+using Irvin.Extensions.Reflection;
 using Irvin.FormatFactory.Internal.Member;
 
 namespace Irvin.FormatFactory.Internal
@@ -218,7 +219,7 @@ namespace Irvin.FormatFactory.Internal
                 {
                     Name = dataColumn.ColumnName
                 };
-                fieldInfo.MemberInfo = MemberInfoFactory.Get(dataColumn);
+                fieldInfo.MemberInfo = new DataColumnWrapper(dataColumn);
                 members.Add(fieldInfo);
             }
 

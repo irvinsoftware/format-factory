@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
-using Irvin.FormatFactory.Internal.Member;
+using Irvin.Extensions.Reflection;
 
 namespace Irvin.FormatFactory.Internal
 {
